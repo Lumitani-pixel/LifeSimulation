@@ -1,0 +1,2 @@
+[Bobby Log]:[2025-10-05 23:31:25]:[DEBUG]: Starting new sim with. Population: 10, WaterPonds: 10, Starting FoodUnits: 10 mating is: enabled
+[Bobby Log]:[2025-10-05 23:31:37]:[DEBUG]: ==========Closing Simulation==========
