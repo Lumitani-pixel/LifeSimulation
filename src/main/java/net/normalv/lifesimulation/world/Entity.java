@@ -1,19 +1,19 @@
 package net.normalv.lifesimulation.world;
 
+import net.normalv.lifesimulation.math.Vec2d;
+
 import java.util.Random;
 
 public abstract class Entity {
     private final Random random = new Random();
     private int runSpeed;
     private int health;
-    private double x;
-    private double y;
+    private Vec2d pos;
 
-    public Entity(int runSpeed, int health, double spawnX, double spawnY) {
+    public Entity(int runSpeed, int health, Vec2d spawnPos) {
         this.runSpeed = runSpeed;
         this.health = health;
-        this.x = spawnX;
-        this.y = spawnY;
+        this.pos = spawnPos;
     }
 
     // Health update functions
@@ -21,21 +21,18 @@ public abstract class Entity {
     public void heal(int amount) {health+=amount;}
 
     // Generic move function
-    public void moveTo(double x, double y) {
-        this.x=x;
-        this.y=y;
+    public void moveTo(Vec2d pos) {
+        this.pos = pos;
     }
 
     public void moveTo(Entity entity) {
-        this.x=entity.getX();
-        this.y=entity.getY();
+        pos=entity.pos;
     }
 
     public void moveRandom(int runSpeed) {
         double lowerBound = runSpeed/2-runSpeed;
         double upperBound = runSpeed/2;
-        x = random.nextDouble(lowerBound, upperBound);
-        y = random.nextDouble(lowerBound, upperBound);
+        pos = new Vec2d(random.nextDouble(lowerBound, upperBound), random.nextDouble(lowerBound, upperBound));
     }
 
     /**
@@ -44,8 +41,8 @@ public abstract class Entity {
      * @return
      */
     public double distanceTo(Entity entity) {
-        double xDistance = this.getX()-entity.getX();
-        double yDistance = this.getY()-entity.getY();
+        double xDistance = this.pos.x()-entity.pos.x();
+        double yDistance = this.pos.y()-entity.pos.y();
 
         return Math.sqrt(xDistance * xDistance + yDistance * yDistance);
     }
@@ -57,15 +54,13 @@ public abstract class Entity {
      * @return
      */
     public double distanceTo(double x, double y) {
-        double xDistance = this.getX()-x;
-        double yDistance = this.getY()-y;
+        double xDistance = this.pos.x()-x;
+        double yDistance = this.pos.y()-y;
 
         return Math.sqrt(xDistance * xDistance + yDistance * yDistance);
     }
 
     // All getters for the entity class
-    public double getX() {return x;}
-    public double getY() {return y;}
     public int getHealth() {return health;}
     public int getRunSpeed() {return runSpeed;}
 }

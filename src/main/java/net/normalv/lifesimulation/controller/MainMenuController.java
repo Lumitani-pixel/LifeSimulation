@@ -90,8 +90,8 @@ public class MainMenuController {
 
     // So you can see how far it is at building the scene
     public void increaseProgress(double value) {
-        progress+=value;
-        this.progressBar.setProgress(progress);
+        //progress+=value;
+        //this.progressBar.setProgress(progress);
     }
 
     public Color getFoodColor() {

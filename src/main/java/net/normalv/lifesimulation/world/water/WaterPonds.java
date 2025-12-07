@@ -10,8 +10,8 @@ public class WaterPonds {
     public static waterPond[] createWaterPonds(int sizex, int sizey, int amount) {
        Random random = new Random();
       waterPond[] waterPond = new waterPond[amount];
-      for (int i = 1; i <= amount; i++) {
-         waterPond[i-1] = new waterPond(random.nextInt(sizex, sizey), random.nextInt(sizex, sizey), random.nextInt(1, 100));
+      for (int i = 0; i < amount; i++) {
+         waterPond[i] = new waterPond(random.nextInt(sizex, sizey), random.nextInt(sizex, sizey), random.nextInt(1, 100));
       }
        return waterPond;
     }

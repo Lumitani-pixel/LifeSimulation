@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import net.normalv.lifesimulation.controller.BobbleSimulationController;
 import net.normalv.lifesimulation.controller.MainMenuController;
+import net.normalv.lifesimulation.math.Vec2d;
 import net.normalv.lifesimulation.world.food.FoodItem;
 
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ public class Bobble extends Features {
     private int hunger = 100;
     private int thirst = 100;
 
-    public Bobble(int runSpeed, int sightDistance, double spawnX, double spawnY) {
-        super(runSpeed, sightDistance, spawnX, spawnY);
+    public Bobble(int runSpeed, int sightDistance, Vec2d spawnPos) {
+        super(runSpeed, sightDistance, spawnPos);
     }
 
     public void updateHunger() {
@@ -52,16 +53,22 @@ public class Bobble extends Features {
     public void wander() {
         moveRandom(getRunSpeed());
     }
-    public void gotoWater(int x, int y) {
-        moveTo(x, y);
+
+    public void gotoWater(Vec2d position) {
+        moveTo(position);
     }
-    public void gotoFood(int x, int y) {
-        moveTo(x, y);
+
+    public void gotoFood(Vec2d position) {
+        moveTo(position);
     }
 
     public static Bobble makeBobbleWithRandomFeatures() {
         Random random = new Random();
-        return new Bobble(random.nextInt(1,11), random.nextInt(1,11), random.nextDouble(1200), random.nextDouble(700));
+        return new Bobble(
+                random.nextInt(1,11),
+                random.nextInt(1,11),
+                new Vec2d(random.nextDouble(1200), random.nextDouble(700))
+        );
     }
     public static ArrayList<Bobble> makeRandomBobbles(int amount) {
         ArrayList<Bobble> randomBobbles = new ArrayList<>(amount);
