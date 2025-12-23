@@ -2,11 +2,11 @@ package net.normalv.lifesimulation.world;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
-import net.normalv.lifesimulation.Logger;
 import net.normalv.lifesimulation.bobble.Bobble;
 import net.normalv.lifesimulation.controller.BobbleSimulationController;
 import net.normalv.lifesimulation.controller.MainMenuController;
 import net.normalv.lifesimulation.world.water.WaterPonds;
+import net.normalv.logger.Logger;
 
 import java.util.List;
 

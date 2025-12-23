@@ -10,8 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import net.normalv.lifesimulation.LifeSimApplication;
-import net.normalv.lifesimulation.Logger;
 import net.normalv.lifesimulation.world.UpdateLoop;
+import net.normalv.logger.Logger;
 
 import java.io.IOException;
 

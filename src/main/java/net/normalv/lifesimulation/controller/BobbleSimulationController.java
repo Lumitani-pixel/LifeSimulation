@@ -7,7 +7,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import net.normalv.lifesimulation.Logger;
+import net.normalv.logger.Logger;
 
 public class BobbleSimulationController {
     @FXML
