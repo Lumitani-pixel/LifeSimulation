@@ -7,18 +7,30 @@ public class WaterPonds {
     private int y;
     private int waterAmount;
 
-    public static waterPond[] createWaterPonds(int sizex, int sizey, int amount) {
+    public WaterPonds(int x, int y, int waterAmount) {
+        this.x = x;
+        this.y = y;
+        this.waterAmount = waterAmount;
+    }
+
+    public static WaterPonds[] createWaterPonds(int sizex, int sizey, int amount) {
        Random random = new Random();
-      waterPond[] waterPond = new waterPond[amount];
+      WaterPonds[] waterPond = new WaterPonds[amount];
       for (int i = 0; i < amount; i++) {
-         waterPond[i] = new waterPond(random.nextInt(sizex, sizey), random.nextInt(sizex, sizey), random.nextInt(1, 100));
+         waterPond[i] = new WaterPonds(random.nextInt(sizex, sizey), random.nextInt(sizex, sizey), random.nextInt(1, 100));
       }
        return waterPond;
     }
 
-    public record waterPond(int x, int y, int waterAmount) {
-      public void updateSize() {
+    public int getX() {
+        return x;
+    }
 
-      }
+    public int getY() {
+        return y;
+    }
+
+    public int getWaterAmount() {
+        return waterAmount;
     }
 }

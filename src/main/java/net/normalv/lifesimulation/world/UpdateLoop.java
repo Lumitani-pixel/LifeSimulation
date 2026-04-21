@@ -19,8 +19,7 @@ public class UpdateLoop{
     private AnchorPane simPane;
 
     private List<Bobble> bobbles;
-    private WaterPonds.waterPond[] waterPonds;
-    private List<Circle> bobbleGraphics;
+    private WaterPonds[] waterPonds;
 
     public UpdateLoop(int population, int waterPondAmount, int foodUnits) {
         // Internal Settings
