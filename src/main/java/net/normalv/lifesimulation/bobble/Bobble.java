@@ -1,14 +1,11 @@
 package net.normalv.lifesimulation.bobble;
 
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import net.normalv.lifesimulation.LifeSimApplication;
 import net.normalv.lifesimulation.math.Vec2d;
 import net.normalv.lifesimulation.world.food.FoodItem;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import static net.normalv.lifesimulation.LifeSimApplication.mainMenuController;
@@ -83,20 +80,10 @@ public class Bobble extends Features {
         ArrayList<Bobble> randomBobbles = new ArrayList<>(amount);
         for (int i = 0; i<amount; i++) {
             mainMenuController.increaseProgress(1/amount);
-            randomBobbles.add(makeBobbleWithRandomFeatures());
+            Bobble bobble = makeBobbleWithRandomFeatures();
+            randomBobbles.add(bobble);
         }
         return randomBobbles;
-    }
-
-    public static List<Circle> makeBobbleGraphics(int amount, Color color) {
-        AnchorPane pane = LifeSimApplication.bobbleSimulationController.getSimPane();
-        Random random = new Random();
-        ArrayList<Circle> circles = new ArrayList<>();
-
-        for(int i = 0; i<amount; i++) {
-            circles.add(new Circle(random.nextDouble(pane.getMinWidth(), pane.getMaxWidth()), random.nextDouble(pane.getMinHeight(), pane.getMaxHeight()), 40, color));
-        }
-        return circles;
     }
 
     public Circle getCircle() {

@@ -41,11 +41,6 @@ public class MainMenuController {
     @FXML
     private ColorPicker waterColor;
 
-    private Parent root;
-    private Stage stage;
-    private Scene scene;
-    private double progress = 0;
-
     public MainMenuController() {
         LifeSimApplication.setMainMenuController(this);
     }
@@ -72,24 +67,10 @@ public class MainMenuController {
             return;
         }
 
-        // Load the new scene "simulation scene"
-        root = FXMLLoader.load(LifeSimApplication.bobbleSimURL);
-        stage = (Stage) ((Node)e.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-
         String matingEnabled = mating.isSelected()?"enabled":"disabled";
         Logger.debug("Starting new sim with. Population: "+amount+", WaterPonds: "+waterPuddles+", Starting FoodUnits: "+foodAmount+" mating is: "+matingEnabled);
 
-        // Start the simulation thread
-        Thread simLoopThread;
-        UpdateLoop updateLoop = new UpdateLoop(amount, waterPuddles, foodAmount);
-        simLoopThread = new Thread(updateLoop::loop, "UpdateLoop");
-        simLoopThread.setDaemon(true);
-        simLoopThread.start();
-
-        // Finally show the stage and assign the scene
-        stage.setScene(scene);
-        stage.show();
+        LifeSimApplication.startSimulation(amount, foodAmount, waterPuddles, mating.isSelected());
     }
 
     // So you can see how far it is at building the scene

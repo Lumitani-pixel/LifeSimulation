@@ -1,7 +1,6 @@
 package net.normalv.lifesimulation.world;
 
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Circle;
 import net.normalv.lifesimulation.LifeSimApplication;
 import net.normalv.lifesimulation.bobble.Bobble;
 import net.normalv.lifesimulation.world.water.WaterPonds;
@@ -57,8 +56,5 @@ public class UpdateLoop{
                 break;
             }
         }
-    }
-
-    private void updateBobbles() {
     }
 }

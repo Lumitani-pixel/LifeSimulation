@@ -22,16 +22,16 @@ public class BobbleSimulationController {
     @FXML
     private Button stopButton;
 
-    private Stage stage;
-
     public BobbleSimulationController() {
         LifeSimApplication.setBobbleSimulationController(this);
     }
 
     public void stop(ActionEvent e) {
-        stage = (Stage) mainPane.getScene().getWindow();
-        Logger.close();
-        stage.close();
+        try {
+            LifeSimApplication.stopSimulation();
+        } catch (InterruptedException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public AnchorPane getSimPane() {
