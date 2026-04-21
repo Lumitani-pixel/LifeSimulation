@@ -30,9 +30,13 @@ public abstract class Entity {
     }
 
     public void moveRandom(int runSpeed) {
-        double lowerBound = runSpeed/2-runSpeed;
-        double upperBound = runSpeed/2;
-        pos = new Vec2d(random.nextDouble(lowerBound, upperBound), random.nextDouble(lowerBound, upperBound));
+        double dx = random.nextDouble(-runSpeed, runSpeed);
+        double dy = random.nextDouble(-runSpeed, runSpeed);
+
+        pos = new Vec2d(
+                pos.x() + dx,
+                pos.y() + dy
+        );
     }
 
     /**
@@ -63,4 +67,7 @@ public abstract class Entity {
     // All getters for the entity class
     public int getHealth() {return health;}
     public int getRunSpeed() {return runSpeed;}
+    public Vec2d getPos() {
+        return pos;
+    }
 }

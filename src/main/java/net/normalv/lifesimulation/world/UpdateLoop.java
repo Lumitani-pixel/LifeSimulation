@@ -1,6 +1,8 @@
 package net.normalv.lifesimulation.world;
 
+import javafx.scene.Group;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Shape;
 import net.normalv.lifesimulation.LifeSimApplication;
 import net.normalv.lifesimulation.bobble.Bobble;
 import net.normalv.lifesimulation.world.water.WaterPonds;
@@ -16,6 +18,7 @@ public class UpdateLoop{
     private int sizex = -100;
     private int sizey = 100;
     private AnchorPane simPane;
+    private Group simGroup = new Group();
 
     private List<Bobble> bobbles;
     private WaterPonds[] waterPonds;
@@ -33,6 +36,10 @@ public class UpdateLoop{
         // World settings
         this.bobbles = Bobble.makeRandomBobbles(this.population);
         this.waterPonds = WaterPonds.createWaterPonds(sizex, sizey, this.waterPondAmount);
+
+        // Add graphics
+        addBobblesToRender();
+        simPane.getChildren().add(simGroup);
 
         Logger.debug("==========Starting simulation loop==========");
     }
@@ -56,5 +63,15 @@ public class UpdateLoop{
                 break;
             }
         }
+    }
+
+    private void addBobblesToRender() {
+        for(Bobble bobble : bobbles) {
+            addGraphicToGroup(bobble.getCircle());
+        }
+    }
+
+    public void addGraphicToGroup(Shape shape) {
+        simGroup.getChildren().add(shape);
     }
 }

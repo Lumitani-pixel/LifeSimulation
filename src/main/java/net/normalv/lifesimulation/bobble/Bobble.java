@@ -2,6 +2,7 @@ package net.normalv.lifesimulation.bobble;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import net.normalv.lifesimulation.LifeSimApplication;
 import net.normalv.lifesimulation.math.Vec2d;
 import net.normalv.lifesimulation.world.food.FoodItem;
 
@@ -35,7 +36,7 @@ public class Bobble extends Features {
         }
     }
     public void updateThirst() {
-        thirst -= (getRunSpeed());
+        thirst -= getRunSpeed() / 2;
     }
     public void updateHealth() {
         if (thirst <= 0 || hunger <= 0) {
@@ -58,6 +59,8 @@ public class Bobble extends Features {
 
     public void wander() {
         moveRandom(getRunSpeed());
+        circle.setCenterX(getPos().x());
+        circle.setCenterY(getPos().y());
     }
 
     public void gotoWater(Vec2d position) {
@@ -73,7 +76,7 @@ public class Bobble extends Features {
         return new Bobble(
                 random.nextInt(1,11),
                 random.nextInt(1,11),
-                new Vec2d(random.nextDouble(1200), random.nextDouble(700))
+                new Vec2d(random.nextDouble(100,500), random.nextDouble(100,500))
         );
     }
     public static ArrayList<Bobble> makeRandomBobbles(int amount) {
