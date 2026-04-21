@@ -14,11 +14,13 @@ import java.util.Random;
 import static net.normalv.lifesimulation.LifeSimApplication.mainMenuController;
 
 public class Bobble extends Features {
+    private Circle circle;
     private int hunger = 100;
     private int thirst = 100;
 
     public Bobble(int runSpeed, int sightDistance, Vec2d spawnPos) {
         super(runSpeed, sightDistance, spawnPos);
+        this.circle = new Circle(spawnPos.x(), spawnPos.y(), 10, Color.GREEN);
     }
 
     public void updateAll() {
@@ -97,6 +99,9 @@ public class Bobble extends Features {
         return circles;
     }
 
+    public Circle getCircle() {
+        return this.circle;
+    }
     public int getHunger() {
         return hunger;
     }
