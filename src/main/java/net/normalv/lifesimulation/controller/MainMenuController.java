@@ -46,6 +46,10 @@ public class MainMenuController {
     private Scene scene;
     private double progress = 0;
 
+    public MainMenuController() {
+        LifeSimApplication.setMainMenuController(this);
+    }
+
     public void start(ActionEvent e) throws IOException {
         errorMessage.setText("");
 

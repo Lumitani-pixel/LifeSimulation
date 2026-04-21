@@ -7,6 +7,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import net.normalv.lifesimulation.LifeSimApplication;
 import net.normalv.logger.Logger;
 
 public class BobbleSimulationController {
@@ -22,6 +23,10 @@ public class BobbleSimulationController {
     private Button stopButton;
 
     private Stage stage;
+
+    public BobbleSimulationController() {
+        LifeSimApplication.setBobbleSimulationController(this);
+    }
 
     public void stop(ActionEvent e) {
         stage = (Stage) mainPane.getScene().getWindow();

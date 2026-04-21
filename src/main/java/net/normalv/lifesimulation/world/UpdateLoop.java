@@ -2,18 +2,14 @@ package net.normalv.lifesimulation.world;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
+import net.normalv.lifesimulation.LifeSimApplication;
 import net.normalv.lifesimulation.bobble.Bobble;
-import net.normalv.lifesimulation.controller.BobbleSimulationController;
-import net.normalv.lifesimulation.controller.MainMenuController;
 import net.normalv.lifesimulation.world.water.WaterPonds;
 import net.normalv.logger.Logger;
 
 import java.util.List;
 
 public class UpdateLoop{
-    private BobbleSimulationController bobbleSimCtrl = new BobbleSimulationController();
-    private MainMenuController mainController = new MainMenuController();
-
     private int population;
     private int waterPondAmount;
     private int foodUnits;
@@ -34,13 +30,11 @@ public class UpdateLoop{
         this.timer = 50;
 
         // Graphical settings
-        simPane = bobbleSimCtrl.getSimPane();
+        simPane = LifeSimApplication.bobbleSimulationController.getSimPane();
 
         // World settings
         this.bobbles = Bobble.makeRandomBobbles(this.population);
         this.waterPonds = WaterPonds.createWaterPonds(sizex, sizey, this.waterPondAmount);
-        //this.bobbleGraphics = Bobble.makeBobbleGraphics(this.population, mainController.getBobbleColor());
-        //bobbleGraphics.forEach(circle -> {simPane.getChildren().add(circle);});
 
         Logger.debug("==========Starting simulation loop==========");
     }
@@ -55,10 +49,7 @@ public class UpdateLoop{
                     Logger.info("Population: "+population);
                     continue;
                 }
-                bobble.updateThirst();
-                bobble.updateHunger();
-                bobble.updateHealth();
-                bobble.wander();
+                bobble.updateAll();
             }
             try {
                 Thread.sleep(timer); // time between refreshes
