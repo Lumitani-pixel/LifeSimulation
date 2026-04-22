@@ -8,17 +8,24 @@ public abstract class Entity {
     private final Random random = new Random();
     private int runSpeed;
     private int health;
+    private boolean alive;
     private Vec2d pos;
 
     public Entity(int runSpeed, int health, Vec2d spawnPos) {
         this.runSpeed = runSpeed;
         this.health = health;
+        this.alive = true;
         this.pos = spawnPos;
     }
 
     // Health update functions
-    public void damage(int damage) {health-=damage;}
-    public void heal(int amount) {health+=amount;}
+    public void damage(int damage) {
+        health-=damage;
+        if(health<=0) alive = false;
+    }
+    public void heal(int amount) {
+        health+=amount;
+    }
 
     // Generic move function
     public void moveTo(Vec2d pos) {
@@ -65,8 +72,15 @@ public abstract class Entity {
     }
 
     // All getters for the entity class
-    public int getHealth() {return health;}
-    public int getRunSpeed() {return runSpeed;}
+    public boolean isAlive() {
+        return alive;
+    }
+    public int getHealth() {
+        return health;
+    }
+    public int getRunSpeed() {
+        return runSpeed;
+    }
     public Vec2d getPos() {
         return pos;
     }

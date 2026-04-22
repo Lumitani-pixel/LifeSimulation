@@ -5,25 +5,25 @@ import javafx.scene.shape.Circle;
 
 import java.util.Random;
 
-public class WaterPonds {
+public class WaterPond {
     private int x;
     private int y;
     private int waterAmount;
     private Circle circle;
 
-    public WaterPonds(int x, int y, int waterAmount) {
+    public WaterPond(int x, int y, int waterAmount) {
         this.x = x;
         this.y = y;
         this.waterAmount = waterAmount;
         this.circle = new Circle(x, y, waterAmount, Color.BLUE);
     }
 
-    public static WaterPonds[] createWaterPonds(int sizex, int sizey, int amount) {
+    public static WaterPond[] createWaterPonds(int sizex, int sizey, int amount) {
         Random random = new Random();
-        WaterPonds[] waterPond = new WaterPonds[amount];
+        WaterPond[] waterPond = new WaterPond[amount];
 
         for (int i = 0; i < amount; i++) {
-            waterPond[i] = new WaterPonds(random.nextInt(sizex, sizey), random.nextInt(sizex, sizey), random.nextInt(1, 100));
+            waterPond[i] = new WaterPond(random.nextInt(sizex), random.nextInt(sizey), random.nextInt(1, 100));
         }
         return waterPond;
     }
