@@ -5,6 +5,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Shape;
 import net.normalv.lifesimulation.LifeSimApplication;
 import net.normalv.lifesimulation.bobble.Bobble;
+import net.normalv.lifesimulation.world.food.Apple;
 import net.normalv.lifesimulation.world.water.WaterPond;
 import net.normalv.logger.Logger;
 
@@ -15,13 +16,14 @@ public class UpdateLoop{
     private int waterPondAmount;
     private int foodUnits;
     private int timer;
-    private int sizex = 500;
-    private int sizey = 500;
+    private int sizex = 700;
+    private int sizey = 700;
     private AnchorPane simPane;
     private Group simGroup = new Group();
 
     private List<Bobble> bobbles;
     private WaterPond[] waterPonds;
+    private List<Apple> apples;
 
     public UpdateLoop(int population, int waterPondAmount, int foodUnits) {
         // Internal Settings
@@ -36,8 +38,10 @@ public class UpdateLoop{
         // World settings
         this.bobbles = Bobble.makeRandomBobbles(this.population);
         this.waterPonds = WaterPond.createWaterPonds(sizex, sizey, this.waterPondAmount);
+        this.apples = Apple.createRandomApples(sizex, sizey, foodUnits);
 
         // Add graphics
+        addApplesToRender();
         addWaterPondsToRender();
         addBobblesToRender();
         simPane.getChildren().add(simGroup);
@@ -75,6 +79,12 @@ public class UpdateLoop{
     private void addWaterPondsToRender() {
         for(WaterPond waterPond : waterPonds) {
             addGraphicToGroup(waterPond.getCircle());
+        }
+    }
+
+    private void addApplesToRender() {
+        for(Apple apple : apples) {
+            addGraphicToGroup(apple.getCircle());
         }
     }
 
