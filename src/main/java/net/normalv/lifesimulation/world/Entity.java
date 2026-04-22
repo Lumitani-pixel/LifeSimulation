@@ -29,12 +29,31 @@ public abstract class Entity {
     }
 
     // Generic move function
-    public void moveTo(Vec2d pos) {
-        this.pos = pos;
+    public void moveTo(Vec2d target) {
+        double dx = target.x() - pos.x();
+        double dy = target.y() - pos.y();
+
+        double distance = Math.sqrt(dx * dx + dy * dy);
+
+        // If already very close, snap to target
+        if (distance <= runSpeed || distance == 0) {
+            pos = target;
+            return;
+        }
+
+        // Normalize direction
+        double nx = dx / distance;
+        double ny = dy / distance;
+
+        // Move by runSpeed in that direction
+        pos = new Vec2d(
+                pos.x() + nx * runSpeed,
+                pos.y() + ny * runSpeed
+        );
     }
 
     public void moveTo(Entity entity) {
-        pos=entity.pos;
+        moveTo(entity.pos);
     }
 
     public void moveRandom(int runSpeed) {

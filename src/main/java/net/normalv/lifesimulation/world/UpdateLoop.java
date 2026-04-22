@@ -59,7 +59,6 @@ public class UpdateLoop{
                     Logger.info("Population: "+population);
                     continue;
                 }
-                Logger.info("Health: "+bobble.getHealth()+", Hunger: "+bobble.getHunger()+", Thirst: "+bobble.getThirst());
                 bobble.updateAll();
             }
             try {

@@ -1,7 +1,9 @@
 package net.normalv.lifesimulation.bobble;
 
+import javafx.animation.TranslateTransition;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 import net.normalv.lifesimulation.LifeSimApplication;
 import net.normalv.lifesimulation.math.Vec2d;
 import net.normalv.lifesimulation.world.food.Apple;
@@ -34,19 +36,19 @@ public class Bobble extends Features {
         if (getRunSpeed()/2 <= 0) {
             hunger -= 2;
         } else {
-            hunger -= (getRunSpeed() / 5);
+            hunger -= (getRunSpeed() / 10);
         }
         if(hunger<0) hunger = 0;
     }
     public void updateThirst() {
-        thirst -= getRunSpeed() / 5;
+        thirst -= getRunSpeed() / 10;
         if(thirst<0) thirst = 0;
     }
     public void updateHealth() {
         if (thirst <= 0 || hunger <= 0) {
-            damage(getSightDistance()/2);
+            damage(getSightDistance()/10);
         } else if(thirst >= 50 && hunger >= 50) {
-            heal(getSightDistance()/2);
+            heal(getSightDistance()/5);
         }
         //Fix to much health
         if(getHealth()>100) {
@@ -84,8 +86,10 @@ public class Bobble extends Features {
             setCurrentGoal(null);
         }
         else moveRandom(getRunSpeed());
-        circle.setCenterX(getPos().x());
-        circle.setCenterY(getPos().y());
+        TranslateTransition transition = new TranslateTransition(Duration.millis(50), circle);
+        transition.setToX(getPos().x());
+        transition.setToY(getPos().y());
+        transition.play();
     }
 
     public void gotoWater(Vec2d position) {
