@@ -11,8 +11,8 @@ public class Apple extends FoodItem{
     private Circle circle;
 
     public Apple(int x, int y) {
-        super(x, y, 20, 40);
-        this.circle = new Circle(x, y, 5, Color.RED);
+        super(x, y, 5, 20, 40);
+        this.circle = new Circle(x, y, getRadius(), Color.RED);
     }
 
     public static List<Apple> createRandomApples(int sizex, int sizey, int amount) {

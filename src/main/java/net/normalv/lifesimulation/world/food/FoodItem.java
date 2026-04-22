@@ -3,13 +3,15 @@ package net.normalv.lifesimulation.world.food;
 public abstract class FoodItem {
     private int x;
     private int y;
+    private int radius;
     private int restoringHunger;
     private boolean isRotten;
     private int expiresIn;
 
-    public FoodItem(int x, int y, int restoringHunger, int expiresIn) {
+    public FoodItem(int x, int y, int radius, int restoringHunger, int expiresIn) {
         this.x = x;
         this.y = y;
+        this.radius = radius;
         this.restoringHunger = restoringHunger;
         this.expiresIn = expiresIn;
     }
@@ -34,5 +36,8 @@ public abstract class FoodItem {
     }
     public int getY() {
         return y;
+    }
+    public int getRadius() {
+        return radius;
     }
 }

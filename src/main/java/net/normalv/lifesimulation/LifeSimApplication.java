@@ -23,6 +23,8 @@ public class LifeSimApplication extends Application {
     private static Scene mainMenuScene;
     private static Scene simulationScene;
 
+    private static UpdateLoop updateLoop;
+
     @Override
     public void start(Stage stage) throws IOException {
         mainStage = stage;
@@ -49,7 +51,7 @@ public class LifeSimApplication extends Application {
 
         mainStage.setScene(simulationScene);
 
-        UpdateLoop updateLoop = new UpdateLoop(amount, waterPuddles, foodAmount);
+        updateLoop = new UpdateLoop(amount, waterPuddles, foodAmount);
         simLoopThread = new Thread(updateLoop::loop, "UpdateLoop");
         simLoopThread.setDaemon(true);
         simLoopThread.start();
@@ -66,5 +68,9 @@ public class LifeSimApplication extends Application {
 
     public static void setBobbleSimulationController(BobbleSimulationController bobbleSimulationControllerSetter) {
         bobbleSimulationController = bobbleSimulationControllerSetter;
+    }
+
+    public static UpdateLoop getUpdateLoop() {
+        return updateLoop;
     }
 }

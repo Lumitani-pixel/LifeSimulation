@@ -59,6 +59,7 @@ public class UpdateLoop{
                     Logger.info("Population: "+population);
                     continue;
                 }
+                Logger.info("Health: "+bobble.getHealth()+", Hunger: "+bobble.getHunger()+", Thirst: "+bobble.getThirst());
                 bobble.updateAll();
             }
             try {
@@ -90,5 +91,17 @@ public class UpdateLoop{
 
     public void addGraphicToGroup(Shape shape) {
         simGroup.getChildren().add(shape);
+    }
+
+    public List<Bobble> getBobbles() {
+        return bobbles;
+    }
+
+    public WaterPond[] getWaterPonds() {
+        return waterPonds;
+    }
+
+    public List<Apple> getApples() {
+        return apples;
     }
 }

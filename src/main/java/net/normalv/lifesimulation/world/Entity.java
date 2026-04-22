@@ -10,6 +10,7 @@ public abstract class Entity {
     private int health;
     private boolean alive;
     private Vec2d pos;
+    private Vec2d currentGoal;
 
     public Entity(int runSpeed, int health, Vec2d spawnPos) {
         this.runSpeed = runSpeed;
@@ -69,6 +70,14 @@ public abstract class Entity {
         double yDistance = this.pos.y()-y;
 
         return Math.sqrt(xDistance * xDistance + yDistance * yDistance);
+    }
+
+    public void setCurrentGoal(Vec2d currentGoal) {
+        this.currentGoal = currentGoal;
+    }
+
+    public Vec2d getCurrentGoal() {
+        return currentGoal;
     }
 
     // All getters for the entity class

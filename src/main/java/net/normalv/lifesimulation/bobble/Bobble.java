@@ -4,7 +4,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import net.normalv.lifesimulation.LifeSimApplication;
 import net.normalv.lifesimulation.math.Vec2d;
+import net.normalv.lifesimulation.world.food.Apple;
 import net.normalv.lifesimulation.world.food.FoodItem;
+import net.normalv.lifesimulation.world.water.WaterPond;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -32,11 +34,13 @@ public class Bobble extends Features {
         if (getRunSpeed()/2 <= 0) {
             hunger -= 2;
         } else {
-            hunger -= (getRunSpeed() / 2);
+            hunger -= (getRunSpeed() / 5);
         }
+        if(hunger<0) hunger = 0;
     }
     public void updateThirst() {
-        thirst -= getRunSpeed() / 2;
+        thirst -= getRunSpeed() / 5;
+        if(thirst<0) thirst = 0;
     }
     public void updateHealth() {
         if (thirst <= 0 || hunger <= 0) {
@@ -58,7 +62,28 @@ public class Bobble extends Features {
     }
 
     public void wander() {
-        moveRandom(getRunSpeed());
+        if(getCurrentGoal() == null && thirst < 80) {
+            for(WaterPond waterPond : LifeSimApplication.getUpdateLoop().getWaterPonds()) {
+                if(distanceTo(waterPond.getX(), waterPond.getY()) - waterPond.getWaterAmount() <= getSightDistance()) {
+                    setCurrentGoal(new Vec2d(waterPond.getX(), waterPond.getY()));
+                    drinkWater();
+                }
+            }
+        }
+        if(getCurrentGoal() == null && hunger < 80) {
+            for(Apple apple : LifeSimApplication.getUpdateLoop().getApples()) {
+                if(distanceTo(apple.getX(), apple.getY()) - apple.getRadius() <= getSightDistance()) {
+                    setCurrentGoal(new Vec2d(apple.getX(), apple.getY()));
+                    eatFood(apple);
+                }
+            }
+        }
+
+        if(getCurrentGoal() != null) {
+            moveTo(getCurrentGoal());
+            setCurrentGoal(null);
+        }
+        else moveRandom(getRunSpeed());
         circle.setCenterX(getPos().x());
         circle.setCenterY(getPos().y());
     }
@@ -74,8 +99,8 @@ public class Bobble extends Features {
     public static Bobble makeBobbleWithRandomFeatures() {
         Random random = new Random();
         return new Bobble(
-                random.nextInt(1,11),
-                random.nextInt(1,11),
+                random.nextInt(1,21),
+                random.nextInt(1,101),
                 new Vec2d(random.nextDouble(100,500), random.nextDouble(100,500))
         );
     }
