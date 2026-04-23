@@ -1,23 +1,26 @@
-package net.normalv.lifesimulation.world;
+package net.normalv.lifesimulation.world.entities;
 
 import net.normalv.lifesimulation.math.Goal;
 import net.normalv.lifesimulation.math.Vec2d;
+import net.normalv.lifesimulation.world.food.FoodItem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public abstract class Entity {
+public abstract class Entity extends Features{
     private final Random random = new Random();
-    private int runSpeed;
     private int health;
     private boolean alive;
+    private int hunger = 100;
+    private int thirst = 100;
+
     private Vec2d pos;
     private Goal currentGoal;
     private List<Vec2d> stepsToGoal = new ArrayList<>();
 
-    public Entity(int runSpeed, int health, Vec2d spawnPos) {
-        this.runSpeed = runSpeed;
+    public Entity(int runSpeed, int health, int sightDistance, Vec2d spawnPos) {
+        super(runSpeed, sightDistance);
         this.health = health;
         this.alive = true;
         this.pos = spawnPos;
@@ -32,6 +35,39 @@ public abstract class Entity {
         health+=amount;
     }
 
+    public void updateHunger() {
+        if (getRunSpeed()/2 <= 0) {
+            hunger -= 2;
+        } else {
+            hunger -= (getRunSpeed() / 10);
+        }
+        if(hunger<0) hunger = 0;
+    }
+
+    public void updateThirst() {
+        thirst -= getRunSpeed() / 10;
+        if(thirst<0) thirst = 0;
+    }
+
+    public void updateHealth() {
+        if (thirst <= 0 || hunger <= 0) {
+            damage(getSightDistance()/10);
+        } else if(thirst >= 50 && hunger >= 50) {
+            heal(getSightDistance()/5);
+        }
+        //Fix to much health
+        if(getHealth()>100) {
+            damage(getHealth()-100);
+        }
+    }
+
+    public void drinkWater() {
+        thirst+=50;
+    }
+    public void eatFood(FoodItem food) {
+        hunger+=food.getRestoringHunger();
+    }
+
     public void moveToNextStep() {
         moveTo(stepsToGoal.removeFirst());
         if(stepsToGoal.isEmpty()) currentGoal = null;
@@ -44,16 +80,6 @@ public abstract class Entity {
 
     public void moveTo(Entity entity) {
         moveTo(entity.pos);
-    }
-
-    public void moveRandom(int runSpeed) {
-        double dx = random.nextDouble(-runSpeed, runSpeed);
-        double dy = random.nextDouble(-runSpeed, runSpeed);
-
-        pos = new Vec2d(
-                pos.x() + dx,
-                pos.y() + dy
-        );
     }
 
     /**
@@ -91,12 +117,12 @@ public abstract class Entity {
         double nextX;
         double nextY;
 
-        while(nextStep.getDifference(currentGoal.getGoalPosition()) > runSpeed) {
-            if(currentGoal.getGoalPosition().x() - nextStep.x() > 0) nextX = nextStep.x()+runSpeed;
-            else nextX = nextStep.x()-runSpeed;
+        while(nextStep.getDifference(currentGoal.getGoalPosition()) > getRunSpeed()) {
+            if(currentGoal.getGoalPosition().x() - nextStep.x() > 0) nextX = nextStep.x() + getRunSpeed();
+            else nextX = nextStep.x() - getRunSpeed();
 
-            if(currentGoal.getGoalPosition().y() - nextStep.y() > 0) nextY = nextStep.y()+runSpeed;
-            else nextY = nextStep.y()-runSpeed;
+            if(currentGoal.getGoalPosition().y() - nextStep.y() > 0) nextY = nextStep.y() + getRunSpeed();
+            else nextY = nextStep.y() - getRunSpeed();
 
             nextStep = new Vec2d(nextX, nextY);
             stepsToGoal.add(nextStep);
@@ -116,12 +142,19 @@ public abstract class Entity {
     public boolean isAlive() {
         return alive;
     }
+
     public int getHealth() {
         return health;
     }
-    public int getRunSpeed() {
-        return runSpeed;
+
+    public int getHunger() {
+        return hunger;
     }
+
+    public int getThirst() {
+        return thirst;
+    }
+
     public Vec2d getPos() {
         return pos;
     }

@@ -56,7 +56,6 @@ public class UpdateLoop{
                 if (population<=0) break;
                 if (bobble.getHealth()<=0) {
                     population--;
-                    Logger.info("Population: "+population);
                     continue;
                 }
                 bobble.updateAll();
