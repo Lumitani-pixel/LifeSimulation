@@ -28,7 +28,6 @@ public class Bobble extends Entity {
     public Bobble(int runSpeed, int sightDistance, Vec2d spawnPos) {
         super(runSpeed, 100, sightDistance, spawnPos);
         this.circle = new Circle(spawnPos.x(), spawnPos.y(), 10, Color.GREEN);
-        transition = new TranslateTransition(Duration.millis(LifeSimApplication.TICK_LENGTH), circle);
     }
 
     public void updateAll() {
@@ -64,9 +63,8 @@ public class Bobble extends Entity {
         else {
             setCurrentGoal(new Goal(new Vec2d(random.nextInt(500), random.nextInt(500)), 1));
         }
-        transition.setToX(getPos().x());
-        transition.setToY(getPos().y());
-        transition.play();
+        circle.setCenterX(getPos().x());
+        circle.setCenterY(getPos().y());
     }
 
     public static Bobble makeBobbleWithRandomFeatures(int spawnRadiusX, int spawnRadiusY) {

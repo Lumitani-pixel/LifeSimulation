@@ -84,12 +84,12 @@ public class UpdateLoop{
 
     public void removeFoodItem(FoodItem foodItem) {
         foodItems.remove(foodItem);
-        Platform.runLater(() -> simGroup.getChildren().remove(foodItem));
+        Platform.runLater(() -> simGroup.getChildren().remove(foodItem.getCircle()));
     }
 
     public void removeWaterPond(WaterPond waterPond) {
         waterPonds.remove(waterPond);
-        Platform.runLater(() -> simGroup.getChildren().remove(waterPond));
+        Platform.runLater(() -> simGroup.getChildren().remove(waterPond.getCircle()));
     }
 
     public void addFoodItem(FoodItem foodItem) {
