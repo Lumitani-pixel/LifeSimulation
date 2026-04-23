@@ -1,8 +1,10 @@
 package net.normalv.lifesimulation.world.entities;
 
+import net.normalv.lifesimulation.LifeSimApplication;
 import net.normalv.lifesimulation.math.Goal;
 import net.normalv.lifesimulation.math.Vec2d;
 import net.normalv.lifesimulation.world.food.FoodItem;
+import net.normalv.lifesimulation.world.water.WaterPond;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,8 @@ public abstract class Entity extends Features{
     private Vec2d pos;
     private Goal currentGoal;
     private List<Vec2d> stepsToGoal = new ArrayList<>();
+    private WaterPond targetWaterPond;
+    private FoodItem targetFood;
 
     public Entity(int runSpeed, int health, int sightDistance, Vec2d spawnPos) {
         super(runSpeed, sightDistance);
@@ -62,15 +66,22 @@ public abstract class Entity extends Features{
     }
 
     public void drinkWater() {
-        thirst+=50;
+        targetWaterPond.drink();
+        if(targetWaterPond.getWaterAmount() < 1) LifeSimApplication.getUpdateLoop().removeWaterPond(targetWaterPond);
+        thirst+=30;
     }
     public void eatFood(FoodItem food) {
         hunger+=food.getRestoringHunger();
+        LifeSimApplication.getUpdateLoop().removeFoodItem(targetFood);
     }
 
     public void moveToNextStep() {
         moveTo(stepsToGoal.removeFirst());
-        if(stepsToGoal.isEmpty()) currentGoal = null;
+        if(stepsToGoal.isEmpty()) {
+            if(thirst < 80 && targetWaterPond != null) drinkWater();
+            else if(hunger < 80 && targetFood != null) eatFood(targetFood);
+            currentGoal = null;
+        }
     }
 
     // Best move function ever created
@@ -105,6 +116,14 @@ public abstract class Entity extends Features{
         double yDistance = this.pos.y()-y;
 
         return Math.sqrt(xDistance * xDistance + yDistance * yDistance);
+    }
+
+    public void setTargetFood(FoodItem food) {
+        targetFood = food;
+    }
+
+    public void setTargetWaterPond(WaterPond waterPond) {
+        targetWaterPond = waterPond;
     }
 
     public void setCurrentGoal(Goal currentGoal) {

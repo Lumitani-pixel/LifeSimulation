@@ -11,6 +11,7 @@ module net.normalv.lifesimulation {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires Logger;
+    requires javafx.graphics;
 
     opens net.normalv.lifesimulation to javafx.fxml;
     exports net.normalv.lifesimulation;

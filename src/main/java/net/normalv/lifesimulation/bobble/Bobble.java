@@ -10,6 +10,7 @@ import net.normalv.lifesimulation.math.Vec2d;
 import net.normalv.lifesimulation.world.entities.Entity;
 import net.normalv.lifesimulation.world.entities.Features;
 import net.normalv.lifesimulation.world.food.Apple;
+import net.normalv.lifesimulation.world.food.FoodItem;
 import net.normalv.lifesimulation.world.water.WaterPond;
 
 import java.util.ArrayList;
@@ -44,15 +45,15 @@ public class Bobble extends Entity {
             for(WaterPond waterPond : LifeSimApplication.getUpdateLoop().getWaterPonds()) {
                 if(distanceTo(waterPond.getX(), waterPond.getY()) - waterPond.getWaterAmount() <= getSightDistance()) {
                     setCurrentGoal(new Goal(new Vec2d(waterPond.getX(), waterPond.getY()), 100));
-                    drinkWater();
+                    setTargetWaterPond(waterPond);
                 }
             }
         }
         if(getHunger() < 80) {
-            for(Apple apple : LifeSimApplication.getUpdateLoop().getApples()) {
-                if(distanceTo(apple.getX(), apple.getY()) - apple.getRadius() <= getSightDistance()) {
-                    setCurrentGoal(new Goal(new Vec2d(apple.getX(), apple.getY()), 100));
-                    eatFood(apple);
+            for(FoodItem foodItem : LifeSimApplication.getUpdateLoop().getFoodItems()) {
+                if(distanceTo(foodItem.getX(), foodItem.getY()) - foodItem.getRadius() <= getSightDistance()) {
+                    setCurrentGoal(new Goal(new Vec2d(foodItem.getX(), foodItem.getY()), 100));
+                    setTargetFood(foodItem);
                 }
             }
         }
@@ -68,19 +69,19 @@ public class Bobble extends Entity {
         transition.play();
     }
 
-    public static Bobble makeBobbleWithRandomFeatures() {
+    public static Bobble makeBobbleWithRandomFeatures(int spawnRadiusX, int spawnRadiusY) {
         Random random = new Random();
         return new Bobble(
                 random.nextInt(10,21),
                 random.nextInt(50,101),
-                new Vec2d(random.nextDouble(100,500), random.nextDouble(100,500))
+                new Vec2d(random.nextInt(spawnRadiusX), random.nextInt(spawnRadiusY))
         );
     }
-    public static ArrayList<Bobble> makeRandomBobbles(int amount) {
+    public static ArrayList<Bobble> makeRandomBobbles(int spawnRadiusX, int spawnRadiusY, int amount) {
         ArrayList<Bobble> randomBobbles = new ArrayList<>(amount);
         for (int i = 0; i<amount; i++) {
             mainMenuController.increaseProgress(1/amount);
-            Bobble bobble = makeBobbleWithRandomFeatures();
+            Bobble bobble = makeBobbleWithRandomFeatures(spawnRadiusX, spawnRadiusY);
             randomBobbles.add(bobble);
         }
         return randomBobbles;

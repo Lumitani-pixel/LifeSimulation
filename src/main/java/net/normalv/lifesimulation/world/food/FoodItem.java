@@ -1,5 +1,8 @@
 package net.normalv.lifesimulation.world.food;
 
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+
 public abstract class FoodItem {
     private int x;
     private int y;
@@ -8,12 +11,15 @@ public abstract class FoodItem {
     private boolean isRotten;
     private int expiresIn;
 
+    private Circle circle;
+
     public FoodItem(int x, int y, int radius, int restoringHunger, int expiresIn) {
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.restoringHunger = restoringHunger;
         this.expiresIn = expiresIn;
+        this.circle = new Circle(x, y, radius, Color.RED);
     }
 
     private void expiring() {
@@ -39,5 +45,8 @@ public abstract class FoodItem {
     }
     public int getRadius() {
         return radius;
+    }
+    public Circle getCircle() {
+        return this.circle;
     }
 }

@@ -3,6 +3,8 @@ package net.normalv.lifesimulation.world.water;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class WaterPond {
@@ -18,14 +20,14 @@ public class WaterPond {
         this.circle = new Circle(x, y, waterAmount, Color.BLUE);
     }
 
-    public static WaterPond[] createWaterPonds(int sizex, int sizey, int amount) {
+    public static List<WaterPond> createWaterPonds(int sizex, int sizey, int amount) {
         Random random = new Random();
-        WaterPond[] waterPond = new WaterPond[amount];
+        List<WaterPond> waterPonds = new ArrayList<>(amount);
 
         for (int i = 0; i < amount; i++) {
-            waterPond[i] = new WaterPond(random.nextInt(sizex), random.nextInt(sizey), random.nextInt(1, 100));
+            waterPonds.add(new WaterPond(random.nextInt(sizex), random.nextInt(sizey), random.nextInt(1, 100)));
         }
-        return waterPond;
+        return waterPonds;
     }
 
     public int getX() {
@@ -38,6 +40,11 @@ public class WaterPond {
 
     public int getWaterAmount() {
         return waterAmount;
+    }
+
+    public void drink() {
+        waterAmount--;
+        circle.setRadius(waterAmount);
     }
 
     public Circle getCircle() {

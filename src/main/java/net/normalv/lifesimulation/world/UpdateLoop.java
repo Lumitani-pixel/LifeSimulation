@@ -1,14 +1,17 @@
 package net.normalv.lifesimulation.world;
 
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Shape;
 import net.normalv.lifesimulation.LifeSimApplication;
 import net.normalv.lifesimulation.bobble.Bobble;
 import net.normalv.lifesimulation.world.food.Apple;
+import net.normalv.lifesimulation.world.food.FoodItem;
 import net.normalv.lifesimulation.world.water.WaterPond;
 import net.normalv.logger.Logger;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,8 +25,8 @@ public class UpdateLoop{
     private Group simGroup = new Group();
 
     private List<Bobble> bobbles;
-    private WaterPond[] waterPonds;
-    private List<Apple> apples;
+    private List<WaterPond> waterPonds;
+    private List<FoodItem> foodItems = new ArrayList<>();
 
     public UpdateLoop(int population, int waterPondAmount, int foodUnits) {
         // Internal Settings
@@ -35,12 +38,12 @@ public class UpdateLoop{
         simPane = LifeSimApplication.bobbleSimulationController.getSimPane();
 
         // World settings
-        this.bobbles = Bobble.makeRandomBobbles(this.population);
+        this.bobbles = Bobble.makeRandomBobbles(sizex, sizey, this.population);
         this.waterPonds = WaterPond.createWaterPonds(sizex, sizey, this.waterPondAmount);
-        this.apples = Apple.createRandomApples(sizex, sizey, foodUnits);
+        this.foodItems.addAll(Apple.createRandomApples(sizex, sizey, foodUnits));
 
         // Add graphics
-        addApplesToRender();
+        addFoodItemsToRender();
         addWaterPondsToRender();
         addBobblesToRender();
         simPane.getChildren().add(simGroup);
@@ -61,6 +64,9 @@ public class UpdateLoop{
                     population--;
                     iterator.remove();
                     Logger.info("Population: "+population);
+                    for(Bobble bobble1 : bobbles) {
+                        System.out.println(bobble1);
+                    }
                     continue;
                 }
 
@@ -76,6 +82,30 @@ public class UpdateLoop{
         }
     }
 
+    public void removeFoodItem(FoodItem foodItem) {
+        foodItems.remove(foodItem);
+        Platform.runLater(() -> simGroup.getChildren().remove(foodItem));
+    }
+
+    public void removeWaterPond(WaterPond waterPond) {
+        waterPonds.remove(waterPond);
+        Platform.runLater(() -> simGroup.getChildren().remove(waterPond));
+    }
+
+    public void addFoodItem(FoodItem foodItem) {
+        foodItems.add(foodItem);
+        addGraphicToGroup(foodItem.getCircle());
+    }
+
+    public void addWaterPond(WaterPond waterPond) {
+        waterPonds.add(waterPond);
+    }
+
+    public void addBobble(Bobble bobble) {
+        bobbles.add(bobble);
+        addGraphicToGroup(bobble.getCircle());
+    }
+
     private void addBobblesToRender() {
         for(Bobble bobble : bobbles) {
             addGraphicToGroup(bobble.getCircle());
@@ -88,9 +118,9 @@ public class UpdateLoop{
         }
     }
 
-    private void addApplesToRender() {
-        for(Apple apple : apples) {
-            addGraphicToGroup(apple.getCircle());
+    private void addFoodItemsToRender() {
+        for(FoodItem foodItem : foodItems) {
+            addGraphicToGroup(foodItem.getCircle());
         }
     }
 
@@ -102,11 +132,11 @@ public class UpdateLoop{
         return bobbles;
     }
 
-    public WaterPond[] getWaterPonds() {
+    public List<WaterPond> getWaterPonds() {
         return waterPonds;
     }
 
-    public List<Apple> getApples() {
-        return apples;
+    public List<FoodItem> getFoodItems() {
+        return foodItems;
     }
 }
