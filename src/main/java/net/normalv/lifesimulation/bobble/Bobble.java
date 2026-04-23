@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import net.normalv.lifesimulation.LifeSimApplication;
+import net.normalv.lifesimulation.math.Goal;
 import net.normalv.lifesimulation.math.Vec2d;
 import net.normalv.lifesimulation.world.food.Apple;
 import net.normalv.lifesimulation.world.food.FoodItem;
@@ -20,9 +21,14 @@ public class Bobble extends Features {
     private int hunger = 100;
     private int thirst = 100;
 
+    private Random random = new Random();
+
+    private TranslateTransition transition;
+
     public Bobble(int runSpeed, int sightDistance, Vec2d spawnPos) {
         super(runSpeed, sightDistance, spawnPos);
         this.circle = new Circle(spawnPos.x(), spawnPos.y(), 10, Color.GREEN);
+        transition = new TranslateTransition(Duration.millis(40), circle);
     }
 
     public void updateAll() {
@@ -64,47 +70,41 @@ public class Bobble extends Features {
     }
 
     public void wander() {
-        if(getCurrentGoal() == null && thirst < 80) {
+        if(!isAlive()) return;
+
+        if(thirst < 80) {
             for(WaterPond waterPond : LifeSimApplication.getUpdateLoop().getWaterPonds()) {
                 if(distanceTo(waterPond.getX(), waterPond.getY()) - waterPond.getWaterAmount() <= getSightDistance()) {
-                    setCurrentGoal(new Vec2d(waterPond.getX(), waterPond.getY()));
+                    setCurrentGoal(new Goal(new Vec2d(waterPond.getX(), waterPond.getY()), 100));
                     drinkWater();
                 }
             }
         }
-        if(getCurrentGoal() == null && hunger < 80) {
+        if(hunger < 80) {
             for(Apple apple : LifeSimApplication.getUpdateLoop().getApples()) {
                 if(distanceTo(apple.getX(), apple.getY()) - apple.getRadius() <= getSightDistance()) {
-                    setCurrentGoal(new Vec2d(apple.getX(), apple.getY()));
+                    setCurrentGoal(new Goal(new Vec2d(apple.getX(), apple.getY()), 100));
                     eatFood(apple);
                 }
             }
         }
 
         if(getCurrentGoal() != null) {
-            moveTo(getCurrentGoal());
-            setCurrentGoal(null);
+            moveToNextStep();
         }
-        else moveRandom(getRunSpeed());
-        TranslateTransition transition = new TranslateTransition(Duration.millis(50), circle);
+        else {
+            setCurrentGoal(new Goal(new Vec2d(random.nextInt(500), random.nextInt(500)), 1));
+        }
         transition.setToX(getPos().x());
         transition.setToY(getPos().y());
         transition.play();
     }
 
-    public void gotoWater(Vec2d position) {
-        moveTo(position);
-    }
-
-    public void gotoFood(Vec2d position) {
-        moveTo(position);
-    }
-
     public static Bobble makeBobbleWithRandomFeatures() {
         Random random = new Random();
         return new Bobble(
-                random.nextInt(1,21),
-                random.nextInt(1,101),
+                random.nextInt(10,21),
+                random.nextInt(50,101),
                 new Vec2d(random.nextDouble(100,500), random.nextDouble(100,500))
         );
     }

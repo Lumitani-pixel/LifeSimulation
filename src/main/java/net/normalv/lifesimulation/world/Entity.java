@@ -1,7 +1,10 @@
 package net.normalv.lifesimulation.world;
 
+import net.normalv.lifesimulation.math.Goal;
 import net.normalv.lifesimulation.math.Vec2d;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public abstract class Entity {
@@ -10,7 +13,8 @@ public abstract class Entity {
     private int health;
     private boolean alive;
     private Vec2d pos;
-    private Vec2d currentGoal;
+    private Goal currentGoal;
+    private List<Vec2d> stepsToGoal = new ArrayList<>();
 
     public Entity(int runSpeed, int health, Vec2d spawnPos) {
         this.runSpeed = runSpeed;
@@ -28,28 +32,14 @@ public abstract class Entity {
         health+=amount;
     }
 
-    // Generic move function
+    public void moveToNextStep() {
+        moveTo(stepsToGoal.removeFirst());
+        if(stepsToGoal.isEmpty()) currentGoal = null;
+    }
+
+    // Best move function ever created
     public void moveTo(Vec2d target) {
-        double dx = target.x() - pos.x();
-        double dy = target.y() - pos.y();
-
-        double distance = Math.sqrt(dx * dx + dy * dy);
-
-        // If already very close, snap to target
-        if (distance <= runSpeed || distance == 0) {
-            pos = target;
-            return;
-        }
-
-        // Normalize direction
-        double nx = dx / distance;
-        double ny = dy / distance;
-
-        // Move by runSpeed in that direction
-        pos = new Vec2d(
-                pos.x() + nx * runSpeed,
-                pos.y() + ny * runSpeed
-        );
+        pos = target;
     }
 
     public void moveTo(Entity entity) {
@@ -91,12 +81,35 @@ public abstract class Entity {
         return Math.sqrt(xDistance * xDistance + yDistance * yDistance);
     }
 
-    public void setCurrentGoal(Vec2d currentGoal) {
+    public void setCurrentGoal(Goal currentGoal) {
+        if(this.currentGoal != null && this.currentGoal.getPriority() > currentGoal.getPriority()) return;
         this.currentGoal = currentGoal;
+
+        Vec2d nextStep = pos;
+        stepsToGoal.clear();
+
+        double nextX;
+        double nextY;
+
+        while(nextStep.getDifference(currentGoal.getGoalPosition()) > runSpeed) {
+            if(currentGoal.getGoalPosition().x() - nextStep.x() > 0) nextX = nextStep.x()+runSpeed;
+            else nextX = nextStep.x()-runSpeed;
+
+            if(currentGoal.getGoalPosition().y() - nextStep.y() > 0) nextY = nextStep.y()+runSpeed;
+            else nextY = nextStep.y()-runSpeed;
+
+            nextStep = new Vec2d(nextX, nextY);
+            stepsToGoal.add(nextStep);
+        }
+        stepsToGoal.add(currentGoal.getGoalPosition());
     }
 
-    public Vec2d getCurrentGoal() {
+    public Goal getCurrentGoal() {
         return currentGoal;
+    }
+
+    public List<Vec2d> getStepsToGoal() {
+        return stepsToGoal;
     }
 
     // All getters for the entity class
