@@ -9,6 +9,7 @@ import net.normalv.lifesimulation.world.food.Apple;
 import net.normalv.lifesimulation.world.water.WaterPond;
 import net.normalv.logger.Logger;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class UpdateLoop{
@@ -51,17 +52,25 @@ public class UpdateLoop{
 
     //Main simulation loop
     public void loop() {
-        while (population>0) {
-            for (Bobble bobble : bobbles) {
-                if (population<=0) break;
-                if (bobble.getHealth()<=0) {
+        while (population > 0) {
+
+            Iterator<Bobble> iterator = bobbles.iterator();
+
+            while (iterator.hasNext()) {
+                Bobble bobble = iterator.next();
+
+                if (bobble.getHealth() <= 0) {
                     population--;
+                    iterator.remove();
+                    Logger.info("Population: "+population);
                     continue;
                 }
+
                 bobble.updateAll();
             }
+
             try {
-                Thread.sleep(timer); // time between refreshes
+                Thread.sleep(timer);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;
