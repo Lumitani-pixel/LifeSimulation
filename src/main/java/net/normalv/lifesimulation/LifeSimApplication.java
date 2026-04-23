@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.net.URL;
 
 public class LifeSimApplication extends Application {
+    public static final int TICK_LENGTH = 100;
+
     public static URL bobbleSimURL;
     public static MainMenuController mainMenuController;
     public static BobbleSimulationController bobbleSimulationController;

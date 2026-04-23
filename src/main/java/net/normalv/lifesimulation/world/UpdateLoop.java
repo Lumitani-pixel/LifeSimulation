@@ -16,7 +16,6 @@ public class UpdateLoop{
     private int population;
     private int waterPondAmount;
     private int foodUnits;
-    private int timer;
     private int sizex = 700;
     private int sizey = 700;
     private AnchorPane simPane;
@@ -31,7 +30,6 @@ public class UpdateLoop{
         this.population = population;
         this.waterPondAmount = waterPondAmount;
         this.foodUnits = foodUnits;
-        this.timer = 50;
 
         // Graphical settings
         simPane = LifeSimApplication.bobbleSimulationController.getSimPane();
@@ -59,7 +57,7 @@ public class UpdateLoop{
             while (iterator.hasNext()) {
                 Bobble bobble = iterator.next();
 
-                if (bobble.getHealth() <= 0) {
+                if (!bobble.isAlive()) {
                     population--;
                     iterator.remove();
                     Logger.info("Population: "+population);
@@ -70,7 +68,7 @@ public class UpdateLoop{
             }
 
             try {
-                Thread.sleep(timer);
+                Thread.sleep(LifeSimApplication.TICK_LENGTH);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;
