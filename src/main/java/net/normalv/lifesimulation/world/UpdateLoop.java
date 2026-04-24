@@ -14,6 +14,7 @@ import net.normalv.logger.Logger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class UpdateLoop{
     public long tickCounter;
@@ -26,7 +27,11 @@ public class UpdateLoop{
     private AnchorPane simPane;
     private Group simGroup = new Group();
 
-    private int foodGrowthRate = 10;
+    private int maxFoodUnits = 1000;
+
+    private int foodGrowthRate = 10; // How many ticks until another food units grows
+    private int rainChance = 500; // Will change each time rain is triggered
+    private int rainDuration = 10; // How many ticks the rain lasts
 
     private List<Bobble> bobbles;
     private List<WaterPond> waterPonds;
@@ -60,6 +65,8 @@ public class UpdateLoop{
 
     //Main simulation loop
     public void loop() {
+        Random random = new Random();
+
         while (population > 0) {
             tickCounter++;
 
@@ -70,8 +77,12 @@ public class UpdateLoop{
 
                 if (!bobble.isAlive()) {
                     population--;
+
+                    // Remove Bobble from internal and visual list
                     iterator.remove();
+                    Platform.runLater(() -> simGroup.getChildren().remove(bobble.getCircle()));
                     Logger.info("Population: "+population);
+
                     for(Bobble bobble1 : bobbles) {
                         System.out.println(bobble1);
                     }
@@ -81,7 +92,18 @@ public class UpdateLoop{
                 bobble.updateAll();
             }
 
-            if(tickCounter%foodGrowthRate==0) addFoodItem(Apple.createRandomApple(sizex, sizey));
+            if(foodUnits<maxFoodUnits && tickCounter%foodGrowthRate==0) addFoodItem(Apple.createRandomApple(sizex, sizey));
+            if(rainDuration<=0 && tickCounter%rainChance==0) {
+                rainDuration = random.nextInt(5, 11);
+                rainChance = random.nextInt(500, 5000);
+            } else if(rainDuration>0) {
+                rainDuration--;
+                if(random.nextInt(10)==5) addWaterPond(WaterPond.createWaterPond(sizex, sizey, 5));
+
+                for(WaterPond waterPond : waterPonds) {
+                    waterPond.fill();
+                }
+            }
 
             try {
                 Thread.sleep(LifeSimApplication.TICK_LENGTH);
@@ -119,6 +141,7 @@ public class UpdateLoop{
         bobbles.add(bobble);
         addGraphicToGroup(bobble.getCircle());
         population++;
+        Logger.info("Population: "+population);
     }
 
     private void addBobblesToRender() {

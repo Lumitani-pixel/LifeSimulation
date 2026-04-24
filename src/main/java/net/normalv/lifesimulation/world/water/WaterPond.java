@@ -20,12 +20,37 @@ public class WaterPond {
         this.circle = new Circle(x, y, waterAmount, Color.BLUE);
     }
 
+    public void fill(int waterAmount) {
+        this.waterAmount+=waterAmount;
+        circle.setRadius(this.waterAmount);
+    }
+
+    public void fill() {
+        waterAmount++;
+        circle.setRadius(waterAmount);
+    }
+
+    public void drink() {
+        waterAmount--;
+        circle.setRadius(waterAmount);
+    }
+
+    public static WaterPond createWaterPond(int sizex, int sizey) {
+        Random random = new Random();
+        return createWaterPond(sizex, sizey, random.nextInt(1, 100));
+    }
+
+    public static WaterPond createWaterPond(int sizex, int sizey, int waterAmount) {
+        Random random = new Random();
+        return new WaterPond(random.nextInt(sizex), random.nextInt(sizey), waterAmount);
+    }
+
     public static List<WaterPond> createWaterPonds(int sizex, int sizey, int amount) {
         Random random = new Random();
         List<WaterPond> waterPonds = new ArrayList<>(amount);
 
         for (int i = 0; i < amount; i++) {
-            waterPonds.add(new WaterPond(random.nextInt(sizex), random.nextInt(sizey), random.nextInt(1, 100)));
+            waterPonds.add(createWaterPond(sizex, sizey, random.nextInt(1, 100)));
         }
         return waterPonds;
     }
@@ -40,11 +65,6 @@ public class WaterPond {
 
     public int getWaterAmount() {
         return waterAmount;
-    }
-
-    public void drink() {
-        waterAmount--;
-        circle.setRadius(waterAmount);
     }
 
     public Circle getCircle() {
