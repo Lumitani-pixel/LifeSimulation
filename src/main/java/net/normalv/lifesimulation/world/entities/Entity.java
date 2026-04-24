@@ -120,6 +120,10 @@ public abstract class Entity extends Features{
         return Math.sqrt(xDistance * xDistance + yDistance * yDistance);
     }
 
+    public double distanceTo(Vec2d pos) {
+        return distanceTo(pos.x(), pos.y());
+    }
+
     public void setTargetFood(FoodItem food) {
         targetFood = food;
     }

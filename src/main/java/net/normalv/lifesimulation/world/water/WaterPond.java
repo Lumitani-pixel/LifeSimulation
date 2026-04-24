@@ -2,22 +2,21 @@ package net.normalv.lifesimulation.world.water;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import net.normalv.lifesimulation.math.Vec2d;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class WaterPond {
-    private int x;
-    private int y;
+    private Vec2d pos;
     private int waterAmount;
     private Circle circle;
 
-    public WaterPond(int x, int y, int waterAmount) {
-        this.x = x;
-        this.y = y;
+    public WaterPond(Vec2d pos, int waterAmount) {
+        this.pos = pos;
         this.waterAmount = waterAmount;
-        this.circle = new Circle(x, y, waterAmount, Color.BLUE);
+        this.circle = new Circle(pos.x(), pos.y(), waterAmount, Color.BLUE);
     }
 
     public void fill(int waterAmount) {
@@ -42,7 +41,7 @@ public class WaterPond {
 
     public static WaterPond createWaterPond(int sizex, int sizey, int waterAmount) {
         Random random = new Random();
-        return new WaterPond(random.nextInt(sizex), random.nextInt(sizey), waterAmount);
+        return new WaterPond(new Vec2d(random.nextInt(sizex), random.nextInt(sizey)), waterAmount);
     }
 
     public static List<WaterPond> createWaterPonds(int sizex, int sizey, int amount) {
@@ -55,12 +54,8 @@ public class WaterPond {
         return waterPonds;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
+    public Vec2d getPos() {
+        return pos;
     }
 
     public int getWaterAmount() {
