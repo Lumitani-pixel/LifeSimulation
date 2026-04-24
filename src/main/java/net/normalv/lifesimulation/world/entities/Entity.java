@@ -134,7 +134,14 @@ public abstract class Entity extends Features{
 
     public void setCurrentGoal(Goal currentGoal) {
         if(this.currentGoal != null && this.currentGoal.getPriority() > currentGoal.getPriority()) return;
-        this.currentGoal = currentGoal;
+
+        if (targetWaterPond != null) {
+            this.currentGoal = new Goal(getEdgePoint(currentGoal.getGoalPosition(), targetWaterPond.getWaterAmount()), currentGoal.getPriority());
+        } else if (targetFood != null) {
+            this.currentGoal = new Goal(getEdgePoint(currentGoal.getGoalPosition(), targetFood.getRadius()), currentGoal.getPriority());
+        } else {
+            this.currentGoal = currentGoal;
+        }
 
         Vec2d nextStep = pos;
         stepsToGoal.clear();
@@ -142,17 +149,32 @@ public abstract class Entity extends Features{
         double nextX;
         double nextY;
 
-        while(nextStep.getDifference(currentGoal.getGoalPosition()) > getRunSpeed()) {
-            if(currentGoal.getGoalPosition().x() - nextStep.x() > 0) nextX = nextStep.x() + getRunSpeed();
+        while(nextStep.getDifference(this.currentGoal.getGoalPosition()) > getRunSpeed()) {
+            if(this.currentGoal.getGoalPosition().x() - nextStep.x() > 0) nextX = nextStep.x() + getRunSpeed();
             else nextX = nextStep.x() - getRunSpeed();
 
-            if(currentGoal.getGoalPosition().y() - nextStep.y() > 0) nextY = nextStep.y() + getRunSpeed();
+            if(this.currentGoal.getGoalPosition().y() - nextStep.y() > 0) nextY = nextStep.y() + getRunSpeed();
             else nextY = nextStep.y() - getRunSpeed();
 
             nextStep = new Vec2d(nextX, nextY);
             stepsToGoal.add(nextStep);
         }
-        stepsToGoal.add(currentGoal.getGoalPosition());
+        stepsToGoal.add(this.currentGoal.getGoalPosition());
+    }
+
+    private Vec2d getEdgePoint(Vec2d center, double radius) {
+        double dx = center.x() - pos.x();
+        double dy = center.y() - pos.y();
+        double length = Math.sqrt(dx * dx + dy * dy);
+
+        if (length == 0) return center;
+
+        double nx = dx / length;
+        double ny = dy / length;
+        double goalX = center.x() - nx * radius;
+        double goalY = center.y() - ny * radius;
+
+        return new Vec2d(goalX, goalY);
     }
 
     public Goal getCurrentGoal() {

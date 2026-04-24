@@ -43,16 +43,16 @@ public class Bobble extends Entity {
         if(getThirst() < 80) {
             for(WaterPond waterPond : LifeSimApplication.getUpdateLoop().getWaterPonds()) {
                 if(distanceTo(waterPond.getPos()) - waterPond.getWaterAmount() <= getSightDistance()) {
-                    setCurrentGoal(new Goal(waterPond.getPos(), 100));
                     setTargetWaterPond(waterPond);
+                    setCurrentGoal(new Goal(waterPond.getPos(), 100));
                 }
             }
         }
         if(getHunger() < 80) {
             for(FoodItem foodItem : LifeSimApplication.getUpdateLoop().getFoodItems()) {
                 if(distanceTo(foodItem.getPos()) - foodItem.getRadius() <= getSightDistance()) {
-                    setCurrentGoal(new Goal(foodItem.getPos(), 100));
                     setTargetFood(foodItem);
+                    setCurrentGoal(new Goal(foodItem.getPos(), 100));
                 }
             }
         }
