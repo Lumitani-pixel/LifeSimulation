@@ -9,6 +9,11 @@ public class Apple extends FoodItem{
         super(x, y, 5, 20, 40);
     }
 
+    public static Apple createRandomApple(int sizex, int sizey) {
+        Random random = new Random();
+        return new Apple(random.nextInt(sizex), random.nextInt(sizey));
+    }
+
     public static List<Apple> createRandomApples(int sizex, int sizey, int amount) {
         List<Apple> apples = new ArrayList<>(amount);
         Random random = new Random();
@@ -18,5 +23,4 @@ public class Apple extends FoodItem{
         }
         return apples;
     }
-
 }

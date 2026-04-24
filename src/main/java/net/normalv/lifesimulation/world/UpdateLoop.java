@@ -26,7 +26,7 @@ public class UpdateLoop{
     private AnchorPane simPane;
     private Group simGroup = new Group();
 
-    private int foodGrowthRate = 1;
+    private int foodGrowthRate = 10;
 
     private List<Bobble> bobbles;
     private List<WaterPond> waterPonds;
@@ -80,6 +80,8 @@ public class UpdateLoop{
 
                 bobble.updateAll();
             }
+
+            if(tickCounter%foodGrowthRate==0) addFoodItem(Apple.createRandomApple(sizex, sizey));
 
             try {
                 Thread.sleep(LifeSimApplication.TICK_LENGTH);
@@ -138,7 +140,7 @@ public class UpdateLoop{
     }
 
     public void addGraphicToGroup(Shape shape) {
-        simGroup.getChildren().add(shape);
+        Platform.runLater(() -> simGroup.getChildren().add(shape));
     }
 
     public List<Bobble> getBobbles() {
