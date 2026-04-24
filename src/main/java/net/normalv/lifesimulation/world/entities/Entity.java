@@ -69,10 +69,12 @@ public abstract class Entity extends Features{
         targetWaterPond.drink();
         if(targetWaterPond.getWaterAmount() < 1) LifeSimApplication.getUpdateLoop().removeWaterPond(targetWaterPond);
         thirst+=30;
+        targetWaterPond = null;
     }
     public void eatFood(FoodItem food) {
         hunger+=food.getRestoringHunger();
         LifeSimApplication.getUpdateLoop().removeFoodItem(targetFood);
+        targetFood = null;
     }
 
     public void moveToNextStep() {
