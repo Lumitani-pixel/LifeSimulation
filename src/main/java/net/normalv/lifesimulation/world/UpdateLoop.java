@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class UpdateLoop{
+    public long tickCounter;
+
     private int population;
     private int waterPondAmount;
     private int foodUnits;
@@ -23,6 +25,8 @@ public class UpdateLoop{
     private int sizey = 700;
     private AnchorPane simPane;
     private Group simGroup = new Group();
+
+    private int foodGrowthRate = 1;
 
     private List<Bobble> bobbles;
     private List<WaterPond> waterPonds;
@@ -33,6 +37,9 @@ public class UpdateLoop{
         this.population = population;
         this.waterPondAmount = waterPondAmount;
         this.foodUnits = foodUnits;
+
+        // Set tick related variables
+        tickCounter = 0;
 
         // Graphical settings
         simPane = LifeSimApplication.bobbleSimulationController.getSimPane();
@@ -54,6 +61,7 @@ public class UpdateLoop{
     //Main simulation loop
     public void loop() {
         while (population > 0) {
+            tickCounter++;
 
             Iterator<Bobble> iterator = bobbles.iterator();
 
@@ -84,26 +92,31 @@ public class UpdateLoop{
 
     public void removeFoodItem(FoodItem foodItem) {
         foodItems.remove(foodItem);
+        foodUnits--;
         Platform.runLater(() -> simGroup.getChildren().remove(foodItem.getCircle()));
     }
 
     public void removeWaterPond(WaterPond waterPond) {
         waterPonds.remove(waterPond);
+        waterPondAmount--;
         Platform.runLater(() -> simGroup.getChildren().remove(waterPond.getCircle()));
     }
 
     public void addFoodItem(FoodItem foodItem) {
         foodItems.add(foodItem);
         addGraphicToGroup(foodItem.getCircle());
+        foodUnits++;
     }
 
     public void addWaterPond(WaterPond waterPond) {
         waterPonds.add(waterPond);
+        waterPondAmount++;
     }
 
     public void addBobble(Bobble bobble) {
         bobbles.add(bobble);
         addGraphicToGroup(bobble.getCircle());
+        population++;
     }
 
     private void addBobblesToRender() {
