@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Apple extends FoodItem{
     public Apple(Vec2d pos) {
-        super(pos, 5, 20, 40);
+        super(pos, 5, 20, 40, 60);
     }
 
     public static Apple createRandomApple(int sizex, int sizey) {

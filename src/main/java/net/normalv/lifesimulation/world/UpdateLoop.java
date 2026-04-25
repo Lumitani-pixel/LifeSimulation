@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UpdateLoop{
     public long tickCounter;
@@ -30,13 +31,13 @@ public class UpdateLoop{
 
     private int maxFoodUnits = 1000;
 
-    private int foodGrowthRate = 5; // How many ticks until another food units grows
+    private int foodGrowthRate = 2; // How many ticks until another food units grows
     private int rainChance = 500; // Will change each time rain is triggered
     private int rainDuration = 10; // How many ticks the rain lasts
 
     private List<Bobble> bobbles;
     private List<WaterPond> waterPonds;
-    private List<FoodItem> foodItems = new ArrayList<>();
+    private List<FoodItem> foodItems = new CopyOnWriteArrayList<>();
 
     private List<Bobble> bobblesToAdd = new ArrayList<>();
 
@@ -55,7 +56,7 @@ public class UpdateLoop{
 
         // World settings
         this.bobbles = Bobble.makeRandomBobbles(sizex, sizey, this.population);
-        this.waterPonds = WaterPond.createWaterPonds(sizex, sizey, this.waterPondAmount);
+        this.waterPonds = new CopyOnWriteArrayList<>(WaterPond.createWaterPonds(sizex, sizey, this.waterPondAmount));
         this.foodItems.addAll(Apple.createRandomApples(sizex, sizey, foodUnits));
 
         // Add graphics
@@ -107,6 +108,11 @@ public class UpdateLoop{
                 for(WaterPond waterPond : waterPonds) {
                     waterPond.fill();
                 }
+                addFoodItem(Apple.createRandomApple(sizex, sizey));
+            }
+
+            for(FoodItem foodItem : foodItems) {
+                foodItem.update();
             }
 
             try {

@@ -8,7 +8,6 @@ import net.normalv.lifesimulation.math.Vec2d;
 import net.normalv.lifesimulation.world.entities.Entity;
 import net.normalv.lifesimulation.world.food.FoodItem;
 import net.normalv.lifesimulation.world.water.WaterPond;
-import net.normalv.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.Random;
