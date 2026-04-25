@@ -13,8 +13,9 @@ import net.normalv.logger.Logger;
 import java.io.IOException;
 import java.net.URL;
 
+//TODO Find a good option for multi thread (I'm not good at it YET) Currently all multi thread stuff is solved using Platform.runLater()
 public class LifeSimApplication extends Application {
-    public static final int TICK_LENGTH = 100;
+    public static final int TICK_LENGTH = 10;
 
     public static URL bobbleSimURL;
     public static MainMenuController mainMenuController;

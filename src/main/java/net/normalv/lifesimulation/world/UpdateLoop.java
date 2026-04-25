@@ -100,7 +100,7 @@ public class UpdateLoop{
             if(foodUnits<maxFoodUnits && tickCounter%foodGrowthRate==0) addFoodItem(Apple.createRandomApple(sizex, sizey));
             if(rainDuration<=0 && tickCounter%rainChance==0) {
                 rainDuration = random.nextInt(5, 11);
-                rainChance = random.nextInt(300, 2000);
+                rainChance = random.nextInt(300, 1000);
             } else if(rainDuration>0) {
                 rainDuration--;
                 if(random.nextInt(10)==5) addWaterPond(WaterPond.createWaterPond(sizex, sizey, 5));
@@ -114,6 +114,13 @@ public class UpdateLoop{
             for(FoodItem foodItem : foodItems) {
                 foodItem.update();
             }
+
+            Platform.runLater(() -> {
+                for(Bobble bobble : bobbles) {
+                    bobble.getCircle().setCenterX(bobble.getPos().x());
+                    bobble.getCircle().setCenterY(bobble.getPos().y());
+                }
+            });
 
             try {
                 Thread.sleep(LifeSimApplication.TICK_LENGTH);

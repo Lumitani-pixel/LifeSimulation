@@ -49,6 +49,10 @@ public abstract class FoodItem {
         return isRotten;
     }
 
+    public int getDespawnIn() {
+        return despawnIn;
+    }
+
     public int getRestoringHunger() {
         return isRotten?restoringHunger/2:restoringHunger;
     }

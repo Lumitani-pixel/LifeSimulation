@@ -17,7 +17,7 @@ import static net.normalv.lifesimulation.LifeSimApplication.mainMenuController;
 public class Bobble extends Entity {
     private Circle circle;
 
-    private int meetingCooldown = 500;
+    private int meetingCooldown = 2000;
     private Bobble bobbleToMeet;
     private Vec2d meetingPos;
 
@@ -51,6 +51,7 @@ public class Bobble extends Entity {
         }
         if(getHunger() < 80 && getTargetFood() == null) {
             for(FoodItem foodItem : LifeSimApplication.getUpdateLoop().getFoodItems()) {
+                if(foodItem.getDespawnIn() < 10) continue;
                 if(distanceTo(foodItem.getPos()) - foodItem.getRadius() <= getSightDistance()) {
 
                     setTargetFood(foodItem);
@@ -65,7 +66,7 @@ public class Bobble extends Entity {
         }
         else if(LifeSimApplication.getUpdateLoop().isMatingEnabled() && meetingCooldown<=0 && LifeSimApplication.getUpdateLoop().getPopulation() > 1) {
             findBobbleToMeet();
-            meetingCooldown = 500;
+            meetingCooldown = 3000;
             return;
         }
         else {
@@ -73,8 +74,8 @@ public class Bobble extends Entity {
         }
 
         meetingCooldown--;
-        circle.setCenterX(getPos().x());
-        circle.setCenterY(getPos().y());
+        //circle.setCenterX(getPos().x());
+        //circle.setCenterY(getPos().y());
     }
 
     public void updateMeet() {
