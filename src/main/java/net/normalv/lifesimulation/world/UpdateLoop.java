@@ -22,6 +22,7 @@ public class UpdateLoop{
     private int population;
     private int waterPondAmount;
     private int foodUnits;
+    private boolean matingEnabled;
     private int sizex = 700;
     private int sizey = 700;
     private AnchorPane simPane;
@@ -39,12 +40,12 @@ public class UpdateLoop{
 
     private List<Bobble> bobblesToAdd = new ArrayList<>();
 
-    //TODO: Implement option for enabling and disabling mating
     public UpdateLoop(int population, int waterPondAmount, int foodUnits, boolean matingEnabled) {
         // Internal Settings
         this.population = population;
         this.waterPondAmount = waterPondAmount;
         this.foodUnits = foodUnits;
+        this.matingEnabled = matingEnabled;
 
         // Set tick related variables
         tickCounter = 0;
@@ -181,6 +182,10 @@ public class UpdateLoop{
 
     public List<FoodItem> getFoodItems() {
         return foodItems;
+    }
+
+    public boolean isMatingEnabled() {
+        return matingEnabled;
     }
 
     public int getPopulation() {

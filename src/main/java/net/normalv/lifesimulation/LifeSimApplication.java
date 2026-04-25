@@ -13,7 +13,6 @@ import net.normalv.logger.Logger;
 import java.io.IOException;
 import java.net.URL;
 
-//FIXME NEWBORNS STOP MOVING OR BOBBLES AFTER MATING DONT START MOVING ALSO THEY DONT MOVE TO THE MEETING POS
 public class LifeSimApplication extends Application {
     public static final int TICK_LENGTH = 100;
 

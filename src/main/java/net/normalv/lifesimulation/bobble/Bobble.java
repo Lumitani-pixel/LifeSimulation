@@ -64,9 +64,9 @@ public class Bobble extends Entity {
         if(getCurrentGoal() != null) {
             moveToNextStep();
         }
-        else if(meetingCooldown<=0 && LifeSimApplication.getUpdateLoop().getPopulation() > 1) {
+        else if(LifeSimApplication.getUpdateLoop().isMatingEnabled() && meetingCooldown<=0 && LifeSimApplication.getUpdateLoop().getPopulation() > 1) {
             findBobbleToMeet();
-            meetingCooldown = 100;
+            meetingCooldown = 500;
             return;
         }
         else {
