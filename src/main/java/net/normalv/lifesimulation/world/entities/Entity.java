@@ -132,8 +132,8 @@ public abstract class Entity extends Features{
         targetWaterPond = waterPond;
     }
 
-    public void setCurrentGoal(Goal currentGoal) {
-        if(this.currentGoal != null && this.currentGoal.getPriority() > currentGoal.getPriority()) return;
+    public boolean setCurrentGoal(Goal currentGoal) {
+        if(this.currentGoal != null && this.currentGoal.getPriority() > currentGoal.getPriority()) return false;
 
         if (targetWaterPond != null) {
             this.currentGoal = new Goal(getEdgePoint(currentGoal.getGoalPosition(), targetWaterPond.getWaterAmount()), currentGoal.getPriority());
@@ -160,6 +160,7 @@ public abstract class Entity extends Features{
             stepsToGoal.add(nextStep);
         }
         stepsToGoal.add(this.currentGoal.getGoalPosition());
+        return true;
     }
 
     private Vec2d getEdgePoint(Vec2d center, double radius) {
@@ -175,6 +176,14 @@ public abstract class Entity extends Features{
         double goalY = center.y() - ny * radius;
 
         return new Vec2d(goalX, goalY);
+    }
+
+    public WaterPond getTargetWaterPond() {
+        return targetWaterPond;
+    }
+
+    public FoodItem getTargetFood() {
+        return targetFood;
     }
 
     public Goal getCurrentGoal() {

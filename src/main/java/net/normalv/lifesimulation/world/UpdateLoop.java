@@ -29,7 +29,7 @@ public class UpdateLoop{
 
     private int maxFoodUnits = 1000;
 
-    private int foodGrowthRate = 10; // How many ticks until another food units grows
+    private int foodGrowthRate = 5; // How many ticks until another food units grows
     private int rainChance = 500; // Will change each time rain is triggered
     private int rainDuration = 10; // How many ticks the rain lasts
 
@@ -37,7 +37,10 @@ public class UpdateLoop{
     private List<WaterPond> waterPonds;
     private List<FoodItem> foodItems = new ArrayList<>();
 
-    public UpdateLoop(int population, int waterPondAmount, int foodUnits) {
+    private List<Bobble> bobblesToAdd = new ArrayList<>();
+
+    //TODO: Implement option for enabling and disabling mating
+    public UpdateLoop(int population, int waterPondAmount, int foodUnits, boolean matingEnabled) {
         // Internal Settings
         this.population = population;
         this.waterPondAmount = waterPondAmount;
@@ -82,20 +85,20 @@ public class UpdateLoop{
                     iterator.remove();
                     Platform.runLater(() -> simGroup.getChildren().remove(bobble.getCircle()));
                     Logger.info("Population: "+population);
-
-                    for(Bobble bobble1 : bobbles) {
-                        System.out.println(bobble1);
-                    }
+                    Logger.info("Dead bobble: "+bobble);
                     continue;
                 }
 
                 bobble.updateAll();
             }
 
+            bobbles.addAll(bobblesToAdd);
+            bobblesToAdd.clear();
+
             if(foodUnits<maxFoodUnits && tickCounter%foodGrowthRate==0) addFoodItem(Apple.createRandomApple(sizex, sizey));
             if(rainDuration<=0 && tickCounter%rainChance==0) {
                 rainDuration = random.nextInt(5, 11);
-                rainChance = random.nextInt(500, 5000);
+                rainChance = random.nextInt(300, 2000);
             } else if(rainDuration>0) {
                 rainDuration--;
                 if(random.nextInt(10)==5) addWaterPond(WaterPond.createWaterPond(sizex, sizey, 5));
@@ -112,6 +115,8 @@ public class UpdateLoop{
                 break;
             }
         }
+
+        Logger.info("Simulation duration: "+tickCounter);
     }
 
     public void removeFoodItem(FoodItem foodItem) {
@@ -138,7 +143,7 @@ public class UpdateLoop{
     }
 
     public void addBobble(Bobble bobble) {
-        bobbles.add(bobble);
+        bobblesToAdd.add(bobble);
         addGraphicToGroup(bobble.getCircle());
         population++;
         Logger.info("Population: "+population);
@@ -176,5 +181,9 @@ public class UpdateLoop{
 
     public List<FoodItem> getFoodItems() {
         return foodItems;
+    }
+
+    public int getPopulation() {
+        return population;
     }
 }

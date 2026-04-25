@@ -13,8 +13,9 @@ import net.normalv.logger.Logger;
 import java.io.IOException;
 import java.net.URL;
 
+//FIXME NEWBORNS STOP MOVING OR BOBBLES AFTER MATING DONT START MOVING ALSO THEY DONT MOVE TO THE MEETING POS
 public class LifeSimApplication extends Application {
-    public static final int TICK_LENGTH = 10;
+    public static final int TICK_LENGTH = 100;
 
     public static URL bobbleSimURL;
     public static MainMenuController mainMenuController;
@@ -42,7 +43,7 @@ public class LifeSimApplication extends Application {
         mainStage.show();
     }
 
-    public static void startSimulation(int amount, int foodAmount, int waterPuddles, boolean mating) {
+    public static void startSimulation(int amount, int foodAmount, int waterPuddles, boolean matingEnabled) {
         Parent simulationParent;
         try {
             simulationParent = FXMLLoader.load(bobbleSimURL);
@@ -53,7 +54,7 @@ public class LifeSimApplication extends Application {
 
         mainStage.setScene(simulationScene);
 
-        updateLoop = new UpdateLoop(amount, waterPuddles, foodAmount);
+        updateLoop = new UpdateLoop(amount, waterPuddles, foodAmount, matingEnabled);
         simLoopThread = new Thread(updateLoop::loop, "UpdateLoop");
         simLoopThread.setDaemon(true);
         simLoopThread.start();

@@ -3,8 +3,8 @@ package net.normalv.lifesimulation.world.entities;
 import java.util.Random;
 
 public abstract class Features {
-    private int sightDistance;
-    private int runSpeed;
+    private int sightDistance; // How far away they can detect objects
+    private int runSpeed; // How far they can run each tick
 
     public Features(int runSpeed, int sightDistance) {
         this.sightDistance = sightDistance;
@@ -27,7 +27,6 @@ public abstract class Features {
     public int getSightDistance() {
         return sightDistance;
     }
-
     public int getRunSpeed() {
         return runSpeed;
     }
