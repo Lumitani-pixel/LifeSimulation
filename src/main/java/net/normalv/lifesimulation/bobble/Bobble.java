@@ -1,5 +1,6 @@
 package net.normalv.lifesimulation.bobble;
 
+import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import net.normalv.lifesimulation.LifeSimApplication;
@@ -53,6 +54,7 @@ public class Bobble extends Entity {
             for(FoodItem foodItem : LifeSimApplication.getUpdateLoop().getFoodItems()) {
                 if(foodItem.getDespawnIn() < 10) continue;
                 if(distanceTo(foodItem.getPos()) - foodItem.getRadius() <= getSightDistance()) {
+                    if(checkForTakenFood(foodItem)) continue;
 
                     setTargetFood(foodItem);
                     if(setCurrentGoal(new Goal(foodItem.getPos(), 100-getHunger()))) break;
@@ -74,8 +76,18 @@ public class Bobble extends Entity {
         }
 
         meetingCooldown--;
-        //circle.setCenterX(getPos().x());
-        //circle.setCenterY(getPos().y());
+        Platform.runLater(() -> {
+            circle.setCenterX(getPos().x());
+            circle.setCenterY(getPos().y());
+        });
+    }
+
+    private boolean checkForTakenFood(FoodItem foodItem) {
+        for(Bobble bobble : LifeSimApplication.getUpdateLoop().getBobbles()) {
+            if(bobble == this || bobble.getTargetFood() == null || !bobble.getTargetFood().getPos().isEqualTo(foodItem.getPos())) continue;
+            return true;
+        }
+        return false;
     }
 
     public void updateMeet() {
