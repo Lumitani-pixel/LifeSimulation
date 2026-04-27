@@ -1,12 +1,13 @@
-package net.normalv.lifesimulation.world.food;
+package net.normalv.lifesimulation.world.food.foods;
 
 import net.normalv.lifesimulation.math.Vec2d;
+import net.normalv.lifesimulation.world.food.FoodItem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Apple extends FoodItem{
+public class Apple extends FoodItem {
     public Apple(Vec2d pos) {
         super(pos, 5, 20, 80, 160);
     }

@@ -1,12 +1,13 @@
 package net.normalv.lifesimulation.world;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Shape;
 import net.normalv.lifesimulation.LifeSimApplication;
 import net.normalv.lifesimulation.bobble.Bobble;
-import net.normalv.lifesimulation.world.food.Apple;
+import net.normalv.lifesimulation.world.food.foods.Apple;
 import net.normalv.lifesimulation.world.food.FoodItem;
 import net.normalv.lifesimulation.world.water.WaterPond;
 import net.normalv.logger.Logger;
@@ -31,7 +32,7 @@ public class UpdateLoop{
 
     private int maxFoodUnits = 1000;
 
-    private int foodGrowthRate = 5; // How many ticks until another food units grows
+    private int foodGrowthRate = 2; // How many ticks until another food units grows
     private int rainChance = 500; // Will change each time rain is triggered
     private int rainDuration = 10; // How many ticks the rain lasts
 
@@ -100,10 +101,10 @@ public class UpdateLoop{
             if(foodUnits<maxFoodUnits && tickCounter%foodGrowthRate==0) addFoodItem(Apple.createRandomApple(sizex, sizey));
             if(rainDuration<=0 && tickCounter%rainChance==0) {
                 rainDuration = random.nextInt(5, 11);
-                rainChance = random.nextInt(500, 2000);
+                rainChance = random.nextInt(500, 1000);
             } else if(rainDuration>0) {
                 rainDuration--;
-                if(random.nextInt(10)==5) addWaterPond(WaterPond.createWaterPond(sizex, sizey, 5));
+                if(random.nextInt(9)==5) addWaterPond(WaterPond.createWaterPond(sizex, sizey, 20));
 
                 for(WaterPond waterPond : waterPonds) {
                     waterPond.fill();

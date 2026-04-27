@@ -68,7 +68,7 @@ public class Bobble extends Entity {
         }
         else if(LifeSimApplication.getUpdateLoop().isMatingEnabled() && meetingCooldown<=0 && LifeSimApplication.getUpdateLoop().getPopulation() > 1) {
             findBobbleToMeet();
-            meetingCooldown = 3000;
+            meetingCooldown = random.nextInt(2500, 3500);
             return;
         }
         else {

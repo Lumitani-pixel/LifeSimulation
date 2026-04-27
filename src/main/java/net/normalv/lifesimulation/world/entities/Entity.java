@@ -40,20 +40,20 @@ public abstract class Entity extends Features{
     }
 
     public void updateHunger() {
-        hunger -= getRunSpeed() / 20;
+        hunger -= getRunSpeed() / 15;
         if(hunger<0) hunger = 0;
     }
 
     public void updateThirst() {
-        thirst -= getRunSpeed() / 20;
+        thirst -= getRunSpeed() / 15;
         if(thirst<0) thirst = 0;
     }
 
     public void updateHealth() {
-        if (thirst <= 0 || hunger <= 0) {
+        if (thirst <= 10 || hunger <= 10) {
             damage(getSightDistance()/20);
-        } else if(thirst >= 50 && hunger >= 50) {
-            heal(getSightDistance()/10);
+        } else if(thirst >= 60 && hunger >= 60) {
+            heal(getSightDistance()/20);
         }
         //Fix to much health
         if(getHealth()>100) {
