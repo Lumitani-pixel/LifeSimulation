@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import net.normalv.lifesimulation.controller.BobbleSimulationController;
 import net.normalv.lifesimulation.controller.MainMenuController;
+import net.normalv.lifesimulation.util.managers.ResourceManager;
 import net.normalv.lifesimulation.world.UpdateLoop;
 import net.normalv.logger.Logger;
 
@@ -28,6 +29,8 @@ public class LifeSimApplication extends Application {
 
     private static UpdateLoop updateLoop;
 
+    public static ResourceManager resourceManager;
+
     @Override
     public void start(Stage stage) throws IOException {
         mainStage = stage;
@@ -35,6 +38,8 @@ public class LifeSimApplication extends Application {
         bobbleSimURL = getClass().getResource("bobblesimulation.fxml");
         Parent root = FXMLLoader.load(getClass().getResource("mainmenu.fxml"));
         mainMenuScene = new Scene(root);
+
+        resourceManager = new ResourceManager();
 
         //Stage settings
         mainStage.setTitle("Bobble Life Sim");

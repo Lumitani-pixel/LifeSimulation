@@ -69,7 +69,7 @@ public abstract class Entity extends Features{
     }
     public void eatFood(FoodItem food) {
         hunger+=food.getRestoringHunger();
-        LifeSimApplication.getUpdateLoop().removeFoodItem(targetFood);
+        targetFood.getSource().removeFoodItem(targetFood);
         targetFood = null;
     }
 

@@ -1,14 +1,14 @@
 package net.normalv.lifesimulation.world;
 
-import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Shape;
 import net.normalv.lifesimulation.LifeSimApplication;
 import net.normalv.lifesimulation.bobble.Bobble;
-import net.normalv.lifesimulation.world.food.foods.Apple;
+import net.normalv.lifesimulation.world.food.FoodSource;
 import net.normalv.lifesimulation.world.food.FoodItem;
+import net.normalv.lifesimulation.world.food.foodsources.AppleTree;
 import net.normalv.lifesimulation.world.water.WaterPond;
 import net.normalv.logger.Logger;
 
@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UpdateLoop{
     public long tickCounter;
@@ -30,15 +29,10 @@ public class UpdateLoop{
     private AnchorPane simPane;
     private Group simGroup = new Group();
 
-    private int maxFoodUnits = 1000;
-
-    private int foodGrowthRate = 2; // How many ticks until another food units grows
     private int rainChance = 500; // Will change each time rain is triggered
     private int rainDuration = 10; // How many ticks the rain lasts
 
     private List<Bobble> bobbles;
-    private List<WaterPond> waterPonds;
-    private List<FoodItem> foodItems = new CopyOnWriteArrayList<>();
 
     private List<Bobble> bobblesToAdd = new ArrayList<>();
 
@@ -57,10 +51,11 @@ public class UpdateLoop{
 
         // World settings
         this.bobbles = Bobble.makeRandomBobbles(sizex, sizey, this.population);
-        this.waterPonds = new CopyOnWriteArrayList<>(WaterPond.createWaterPonds(sizex, sizey, this.waterPondAmount));
-        this.foodItems.addAll(Apple.createRandomApples(sizex, sizey, foodUnits));
+        LifeSimApplication.resourceManager.assignGlobalFoodSources(AppleTree.createRandomAppleTrees(sizex, sizey, 20));
+        LifeSimApplication.resourceManager.assignGlobalWaterPonds(WaterPond.createWaterPonds(sizex, sizey, this.waterPondAmount));
 
         // Add graphics
+        addFoodSourcesToRender();
         addFoodItemsToRender();
         addWaterPondsToRender();
         addBobblesToRender();
@@ -75,6 +70,7 @@ public class UpdateLoop{
 
         while (population > 0) {
             tickCounter++;
+            LifeSimApplication.resourceManager.update();
 
             Iterator<Bobble> iterator = bobbles.iterator();
 
@@ -98,7 +94,6 @@ public class UpdateLoop{
             bobbles.addAll(bobblesToAdd);
             bobblesToAdd.clear();
 
-            if(foodUnits<maxFoodUnits && tickCounter%foodGrowthRate==0) addFoodItem(Apple.createRandomApple(sizex, sizey));
             if(rainDuration<=0 && tickCounter%rainChance==0) {
                 rainDuration = random.nextInt(5, 11);
                 rainChance = random.nextInt(500, 1000);
@@ -106,14 +101,13 @@ public class UpdateLoop{
                 rainDuration--;
                 if(random.nextInt(9)==5) addWaterPond(WaterPond.createWaterPond(sizex, sizey, 20));
 
-                for(WaterPond waterPond : waterPonds) {
+                for(WaterPond waterPond : LifeSimApplication.resourceManager.getGlobalWaterPonds()) {
                     waterPond.fill();
                 }
-                addFoodItem(Apple.createRandomApple(sizex, sizey));
             }
 
-            for(FoodItem foodItem : foodItems) {
-                foodItem.update();
+            for(FoodSource foodSource : LifeSimApplication.resourceManager.getGlobalFoodSources()) {
+                foodSource.update();
             }
 
             try {
@@ -128,25 +122,32 @@ public class UpdateLoop{
     }
 
     public void removeFoodItem(FoodItem foodItem) {
-        foodItems.remove(foodItem);
+        LifeSimApplication.resourceManager.removeFoodItem(foodItem);
         foodUnits--;
         Platform.runLater(() -> simGroup.getChildren().remove(foodItem.getCircle()));
     }
 
     public void removeWaterPond(WaterPond waterPond) {
-        waterPonds.remove(waterPond);
+        LifeSimApplication.resourceManager.removeWaterPond(waterPond);
         waterPondAmount--;
         Platform.runLater(() -> simGroup.getChildren().remove(waterPond.getCircle()));
     }
 
+    public void addFoodSource(FoodSource foodSource) {
+        LifeSimApplication.resourceManager.addFoodSource(foodSource);
+        addGraphicToGroup(foodSource.getShape());
+        foodUnits++;
+    }
+
     public void addFoodItem(FoodItem foodItem) {
-        foodItems.add(foodItem);
+        LifeSimApplication.resourceManager.addFoodItem(foodItem);
         addGraphicToGroup(foodItem.getCircle());
         foodUnits++;
     }
 
     public void addWaterPond(WaterPond waterPond) {
-        waterPonds.add(waterPond);
+        LifeSimApplication.resourceManager.addWaterPond(waterPond);
+        addGraphicToGroup(waterPond.getCircle());
         waterPondAmount++;
     }
 
@@ -164,14 +165,20 @@ public class UpdateLoop{
     }
 
     private void addWaterPondsToRender() {
-        for(WaterPond waterPond : waterPonds) {
+        for(WaterPond waterPond : LifeSimApplication.resourceManager.getGlobalWaterPonds()) {
             addGraphicToGroup(waterPond.getCircle());
         }
     }
 
     private void addFoodItemsToRender() {
-        for(FoodItem foodItem : foodItems) {
+        for(FoodItem foodItem : LifeSimApplication.resourceManager.getGlobalFoodItems()) {
             addGraphicToGroup(foodItem.getCircle());
+        }
+    }
+
+    private void addFoodSourcesToRender() {
+        for(FoodSource foodSource : LifeSimApplication.resourceManager.getGlobalFoodSources()) {
+            addGraphicToGroup(foodSource.getShape());
         }
     }
 
@@ -181,14 +188,6 @@ public class UpdateLoop{
 
     public List<Bobble> getBobbles() {
         return bobbles;
-    }
-
-    public List<WaterPond> getWaterPonds() {
-        return waterPonds;
-    }
-
-    public List<FoodItem> getFoodItems() {
-        return foodItems;
     }
 
     public boolean isMatingEnabled() {

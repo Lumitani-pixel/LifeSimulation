@@ -4,9 +4,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import net.normalv.lifesimulation.LifeSimApplication;
 import net.normalv.lifesimulation.math.Vec2d;
+import net.normalv.lifesimulation.world.food.foods.Apple;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public abstract class FoodItem {
     private Vec2d pos;
+    private FoodSource source;
     private int radius;
     private int restoringHunger;
     private boolean isRotten;
@@ -15,8 +21,9 @@ public abstract class FoodItem {
 
     private Circle circle;
 
-    public FoodItem(Vec2d pos, int radius, int restoringHunger, int expiresIn, int despawnIn) {
+    public FoodItem(Vec2d pos, FoodSource source, int radius, int restoringHunger, int expiresIn, int despawnIn) {
         this.pos = pos;
+        this.source = source;
         this.radius = radius;
         this.restoringHunger = restoringHunger;
         this.expiresIn = expiresIn;
@@ -39,7 +46,7 @@ public abstract class FoodItem {
 
     private void updateDespawn() {
         if(despawnIn<=0) {
-            LifeSimApplication.getUpdateLoop().removeFoodItem(this);
+            source.removeFoodItem(this);
             return;
         }
         despawnIn--;
@@ -58,6 +65,9 @@ public abstract class FoodItem {
     }
     public Vec2d getPos() {
         return pos;
+    }
+    public FoodSource getSource() {
+        return source;
     }
     public int getRadius() {
         return radius;

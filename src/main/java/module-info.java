@@ -23,4 +23,6 @@ module net.normalv.lifesimulation {
     opens net.normalv.lifesimulation.world.water to javafx.fxml;
     exports net.normalv.lifesimulation.world.entities;
     opens net.normalv.lifesimulation.world.entities to javafx.fxml;
+    exports net.normalv.lifesimulation.util.managers;
+    opens net.normalv.lifesimulation.util.managers to javafx.fxml;
 }

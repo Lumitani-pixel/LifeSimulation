@@ -41,7 +41,7 @@ public class Bobble extends Entity {
         if(!isAlive()) return;
 
         if(getThirst() < 80 && getTargetWaterPond() == null) {
-            for(WaterPond waterPond : LifeSimApplication.getUpdateLoop().getWaterPonds()) {
+            for(WaterPond waterPond : LifeSimApplication.resourceManager.getGlobalWaterPonds()) {
                 if(distanceTo(waterPond.getPos()) - waterPond.getWaterAmount() <= getSightDistance()) {
 
                     setTargetWaterPond(waterPond);
@@ -51,7 +51,7 @@ public class Bobble extends Entity {
             }
         }
         if(getHunger() < 80 && getTargetFood() == null) {
-            for(FoodItem foodItem : LifeSimApplication.getUpdateLoop().getFoodItems()) {
+            for(FoodItem foodItem : LifeSimApplication.resourceManager.getGlobalFoodItems()) {
                 if(foodItem.getDespawnIn() < 10) continue;
                 if(distanceTo(foodItem.getPos()) - foodItem.getRadius() <= getSightDistance()) {
                     if(checkForTakenFood(foodItem)) continue;
