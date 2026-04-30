@@ -14,15 +14,13 @@ import net.normalv.logger.Logger;
 import java.io.IOException;
 import java.net.URL;
 
-//TODO Find a good option for multi thread (I'm not good at it YET) Currently all multi thread stuff is solved using Platform.runLater()
 public class LifeSimApplication extends Application {
-    public static final int TICK_LENGTH = 10;
+    public static final int ITERATIONS_PER_FRAME = 1;
 
     public static URL bobbleSimURL;
     public static MainMenuController mainMenuController;
     public static BobbleSimulationController bobbleSimulationController;
 
-    private static Thread simLoopThread;
     private static Stage mainStage;
     private static Scene mainMenuScene;
     private static Scene simulationScene;
@@ -44,7 +42,10 @@ public class LifeSimApplication extends Application {
         //Stage settings
         mainStage.setTitle("Bobble Life Sim");
         mainStage.setScene(mainMenuScene);
-        mainStage.setOnCloseRequest(event -> Logger.close());
+        mainStage.setOnCloseRequest(event -> {
+            Logger.close();
+            if(updateLoop != null) updateLoop.stopLoop();
+        });
         mainStage.show();
     }
 
@@ -60,14 +61,12 @@ public class LifeSimApplication extends Application {
         mainStage.setScene(simulationScene);
 
         updateLoop = new UpdateLoop(amount, waterPuddles, foodAmount, matingEnabled);
-        simLoopThread = new Thread(updateLoop::loop, "UpdateLoop");
-        simLoopThread.setDaemon(true);
-        simLoopThread.start();
+        updateLoop.loop();
     }
 
     public static void stopSimulation() throws InterruptedException {
         mainStage.setScene(mainMenuScene);
-        simLoopThread.join();
+        if(updateLoop != null) updateLoop.stopLoop();
     }
 
     public static void setMainMenuController(MainMenuController mainMenuControllerSetter) {
