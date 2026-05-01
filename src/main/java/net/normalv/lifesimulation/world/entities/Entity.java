@@ -4,7 +4,7 @@ import net.normalv.lifesimulation.LifeSimApplication;
 import net.normalv.lifesimulation.math.Goal;
 import net.normalv.lifesimulation.math.Vec2d;
 import net.normalv.lifesimulation.world.food.FoodItem;
-import net.normalv.lifesimulation.world.water.WaterPond;
+import net.normalv.lifesimulation.world.food.watersources.WaterPond;
 
 import java.util.ArrayList;
 import java.util.List;

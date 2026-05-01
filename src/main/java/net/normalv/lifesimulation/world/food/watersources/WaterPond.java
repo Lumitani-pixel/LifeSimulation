@@ -1,37 +1,35 @@
-package net.normalv.lifesimulation.world.water;
+package net.normalv.lifesimulation.world.food.watersources;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import net.normalv.lifesimulation.math.Vec2d;
+import net.normalv.lifesimulation.world.food.WaterSource;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class WaterPond {
-    private Vec2d pos;
-    private int waterAmount;
-    private Circle circle;
-
+public class WaterPond extends WaterSource {
     public WaterPond(Vec2d pos, int waterAmount) {
-        this.pos = pos;
-        this.waterAmount = waterAmount;
-        this.circle = new Circle(pos.x(), pos.y(), waterAmount, Color.BLUE);
+        super(pos, new Circle(pos.x(), pos.y(), waterAmount, Color.BLUE), waterAmount);
     }
 
+    @Override
     public void fill(int waterAmount) {
         this.waterAmount+=waterAmount;
-        circle.setRadius(this.waterAmount);
+        ((Circle)shape).setRadius(this.waterAmount);
     }
 
+    @Override
     public void fill() {
         waterAmount++;
-        circle.setRadius(waterAmount);
+        ((Circle)shape).setRadius(waterAmount);
     }
 
+    @Override
     public void drink() {
         waterAmount--;
-        circle.setRadius(waterAmount);
+        ((Circle)shape).setRadius(waterAmount);
     }
 
     public static WaterPond createWaterPond(int sizex, int sizey) {
@@ -52,17 +50,5 @@ public class WaterPond {
             waterPonds.add(createWaterPond(sizex, sizey, random.nextInt(1, 100)));
         }
         return waterPonds;
-    }
-
-    public Vec2d getPos() {
-        return pos;
-    }
-
-    public int getWaterAmount() {
-        return waterAmount;
-    }
-
-    public Circle getCircle() {
-        return this.circle;
     }
 }

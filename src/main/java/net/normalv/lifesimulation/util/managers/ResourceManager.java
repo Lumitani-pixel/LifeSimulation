@@ -2,7 +2,7 @@ package net.normalv.lifesimulation.util.managers;
 
 import net.normalv.lifesimulation.world.food.FoodItem;
 import net.normalv.lifesimulation.world.food.FoodSource;
-import net.normalv.lifesimulation.world.water.WaterPond;
+import net.normalv.lifesimulation.world.food.watersources.WaterPond;
 
 import java.util.*;
 
