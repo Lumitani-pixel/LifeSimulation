@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 
 public class LifeSimApplication extends Application {
-    public static final int ITERATIONS_PER_FRAME = 1;
+    public static int iterations_per_frame = 1;
 
     public static URL bobbleSimURL;
     public static MainMenuController mainMenuController;

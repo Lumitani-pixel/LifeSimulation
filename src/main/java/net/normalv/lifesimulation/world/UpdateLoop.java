@@ -14,8 +14,6 @@ import net.normalv.logger.Logger;
 import java.util.*;
 
 public class UpdateLoop{
-    private Timer timer = new Timer();
-
     public long tickCounter;
 
     private int population;
@@ -70,7 +68,7 @@ public class UpdateLoop{
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                for(int i = 0; i<LifeSimApplication.ITERATIONS_PER_FRAME; i++) {
+                for(int i = 0; i<LifeSimApplication.iterations_per_frame; i++) {
                     if(population <= 0) return;
 
                     tickCounter++;

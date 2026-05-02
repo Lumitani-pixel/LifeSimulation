@@ -33,13 +33,9 @@ public class MainMenuController {
     @FXML
     private ProgressBar progressBar;
     @FXML
+    private Slider iterationPerFrameSlider;
+    @FXML
     private Label errorMessage;
-    @FXML
-    private ColorPicker bobbleColor;
-    @FXML
-    private ColorPicker foodColor;
-    @FXML
-    private ColorPicker waterColor;
 
     public MainMenuController() {
         LifeSimApplication.setMainMenuController(this);
@@ -70,6 +66,7 @@ public class MainMenuController {
         String matingEnabled = mating.isSelected()?"enabled":"disabled";
         Logger.debug("Starting new sim with. Population: "+amount+", WaterPonds: "+waterPuddles+", Starting FoodUnits: "+foodAmount+" mating is: "+matingEnabled);
 
+        LifeSimApplication.iterations_per_frame = (int) iterationPerFrameSlider.getValue();
         LifeSimApplication.startSimulation(amount, foodAmount, waterPuddles, mating.isSelected());
     }
 
@@ -77,18 +74,5 @@ public class MainMenuController {
     public void increaseProgress(double value) {
         //progress+=value;
         //this.progressBar.setProgress(progress);
-    }
-
-    public Color getFoodColor() {
-        if(foodColor == null) return Color.RED;
-        return foodColor.getValue();
-    }
-    public Color getWaterColor() {
-        if(waterColor == null) return Color.BLUE;
-        return waterColor.getValue();
-    }
-    public Color getBobbleColor() {
-        if(bobbleColor == null) return Color.GREEN;
-        return bobbleColor.getValue();
     }
 }
