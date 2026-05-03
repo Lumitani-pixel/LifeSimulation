@@ -80,11 +80,16 @@
                   <HBox prefHeight="39.0" prefWidth="602.0" spacing="40.0">
                      <children>
                         <Label text="Iterations per Frame" />
-                        <Slider fx:id="iterationPerFrameSlider" blockIncrement="1.0" max="20.0" min="1.0" showTickLabels="true" snapToTicks="true" value="1.0" />
+                        <Slider fx:id="iterationPerFrameSlider" blockIncrement="1.0" majorTickUnit="5.0" max="20.0" min="1.0" minorTickCount="1" showTickLabels="true" snapToTicks="true" value="1.0" />
                         <Label prefHeight="34.0" prefWidth="270.0" text="This configures at how many iterations per frame (by 60fps) the simulation runs" wrapText="true" />
                      </children>
                   </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0" />
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="40.0">
+                     <children>
+                        <Label text="Rain Duration" />
+                        <Slider fx:id="rainDurationSlider" majorTickUnit="10.0" max="40.0" min="1.0" minorTickCount="1" showTickLabels="true" snapToTicks="true" value="1.0" />
+                        <Label text="For how many ticks the rain should last" />
+                     </children></HBox>
                </children>
             </VBox>
          </content>

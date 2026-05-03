@@ -182,6 +182,10 @@ public class UpdateLoop{
         }
     }
 
+    public void setRainDuration(int duration) {
+        rainDuration = duration;
+    }
+
     public List<Bobble> getBobbles() {
         return bobbles;
     }

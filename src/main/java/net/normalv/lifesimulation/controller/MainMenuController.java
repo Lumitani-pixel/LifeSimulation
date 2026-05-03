@@ -35,6 +35,8 @@ public class MainMenuController {
     @FXML
     private Slider iterationPerFrameSlider;
     @FXML
+    private Slider rainDurationSlider;
+    @FXML
     private Label errorMessage;
 
     public MainMenuController() {
@@ -67,6 +69,7 @@ public class MainMenuController {
         Logger.debug("Starting new sim with. Population: "+amount+", WaterPonds: "+waterPuddles+", Starting FoodUnits: "+foodAmount+" mating is: "+matingEnabled);
 
         LifeSimApplication.iterations_per_frame = (int) iterationPerFrameSlider.getValue();
+        LifeSimApplication.getUpdateLoop().setRainDuration((int) rainDurationSlider.getValue());
         LifeSimApplication.startSimulation(amount, foodAmount, waterPuddles, mating.isSelected());
     }
 
