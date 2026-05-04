@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class Apple extends FoodItem {
     public Apple(Vec2d pos, FoodSource source) {
-        super(pos, source, 5, 20, 80, 160);
+        super(pos, source, 5, 20, 100, 150);
     }
 
     public static Apple createRandomApple(double minX, double minY, double maxX, double maxY, FoodSource source) {
