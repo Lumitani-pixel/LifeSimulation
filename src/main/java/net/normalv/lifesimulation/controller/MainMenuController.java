@@ -69,8 +69,8 @@ public class MainMenuController {
         Logger.debug("Starting new sim with. Population: "+amount+", WaterPonds: "+waterPuddles+", Starting FoodUnits: "+foodAmount+" mating is: "+matingEnabled);
 
         LifeSimApplication.iterations_per_frame = (int) iterationPerFrameSlider.getValue();
-        LifeSimApplication.getUpdateLoop().setRainDuration((int) rainDurationSlider.getValue());
         LifeSimApplication.startSimulation(amount, foodAmount, waterPuddles, mating.isSelected());
+        LifeSimApplication.getUpdateLoop().setRainDuration((int) rainDurationSlider.getValue());
     }
 
     // So you can see how far it is at building the scene
