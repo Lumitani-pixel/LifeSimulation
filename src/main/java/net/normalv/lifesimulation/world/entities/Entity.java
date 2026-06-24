@@ -1,9 +1,11 @@
 package net.normalv.lifesimulation.world.entities;
 
 import net.normalv.lifesimulation.LifeSimApplication;
+import net.normalv.lifesimulation.bobble.Bobble;
 import net.normalv.lifesimulation.math.Goal;
 import net.normalv.lifesimulation.math.Vec2d;
 import net.normalv.lifesimulation.world.food.FoodItem;
+import net.normalv.lifesimulation.world.food.FoodSource;
 import net.normalv.lifesimulation.world.food.watersources.WaterPond;
 
 import java.util.ArrayList;
@@ -16,12 +18,17 @@ public abstract class Entity extends Features{
     private boolean alive;
     private int hunger = 100;
     private int thirst = 100;
+    private int minGrownFoodForTarget = 1; // If there is less food on a food source than this we dont set it as a target
+    private int minWaterAmountForTarget = 1; // If there is less water then this we dont set the water source as a target
 
     private Vec2d pos;
     private Goal currentGoal;
     private List<Vec2d> stepsToGoal = new ArrayList<>();
     private WaterPond targetWaterPond;
-    private FoodItem targetFood;
+    private FoodSource targetFoodSource;
+
+    private WaterPond rememberedWaterPond;
+    private FoodSource rememberedFoodSource;
 
     public Entity(int runSpeed, int health, int sightDistance, Vec2d spawnPos) {
         super(runSpeed, sightDistance);
@@ -69,15 +76,22 @@ public abstract class Entity extends Features{
     }
     public void eatFood(FoodItem food) {
         hunger+=food.getRestoringHunger();
-        targetFood.getSource().removeFoodItem(targetFood);
-        targetFood = null;
+        food.getSource().removeFoodItem(food);
+        setTargetFoodSource(null);
     }
 
     public void moveToNextStep() {
         moveTo(stepsToGoal.removeFirst());
         if(stepsToGoal.isEmpty()) {
-            if(thirst < 80 && targetWaterPond != null) drinkWater();
-            else if(hunger < 80 && targetFood != null) eatFood(targetFood);
+            if(thirst < 80 && targetWaterPond != null) {
+                if(targetWaterPond.getWaterAmount() > minWaterAmountForTarget) rememberedWaterPond = targetWaterPond;
+                drinkWater();
+            }
+            else if(hunger < 80 && targetFoodSource != null) {
+                System.out.println("Food grown: "+targetFoodSource.getGrownFood().size());
+                if(targetFoodSource.getGrownFood().size() > minGrownFoodForTarget) rememberedFoodSource = targetFoodSource;
+                targetFoodSource.getGrownFood().forEach(this::eatFood);
+            }
             currentGoal = null;
         }
     }
@@ -120,8 +134,8 @@ public abstract class Entity extends Features{
         return distanceTo(pos.x(), pos.y());
     }
 
-    public void setTargetFood(FoodItem food) {
-        targetFood = food;
+    public void setTargetFoodSource(FoodSource foodSource) {
+        targetFoodSource = foodSource;
     }
 
     public void setTargetWaterPond(WaterPond waterPond) {
@@ -133,8 +147,8 @@ public abstract class Entity extends Features{
 
         if (targetWaterPond != null) {
             this.currentGoal = new Goal(getEdgePoint(currentGoal.getGoalPosition(), targetWaterPond.getWaterAmount()), currentGoal.getPriority());
-        } else if (targetFood != null) {
-            this.currentGoal = new Goal(getEdgePoint(currentGoal.getGoalPosition(), targetFood.getRadius()), currentGoal.getPriority());
+        } else if (targetFoodSource != null) {
+            this.currentGoal = new Goal(getEdgePoint(currentGoal.getGoalPosition(), 10.0), currentGoal.getPriority());
         } else {
             this.currentGoal = currentGoal;
         }
@@ -178,8 +192,24 @@ public abstract class Entity extends Features{
         return targetWaterPond;
     }
 
-    public FoodItem getTargetFood() {
-        return targetFood;
+    public FoodSource getTargetFoodSource() {
+        return targetFoodSource;
+    }
+
+    public WaterPond getRememberedWaterPond() {
+        return rememberedWaterPond;
+    }
+
+    public FoodSource getRememberedFoodSource() {
+        return rememberedFoodSource;
+    }
+
+    public int getMinGrownFoodForTarget() {
+        return minGrownFoodForTarget;
+    }
+
+    public int getMinWaterAmountForTarget() {
+        return minWaterAmountForTarget;
     }
 
     public Goal getCurrentGoal() {

@@ -8,6 +8,7 @@ import net.normalv.lifesimulation.math.Goal;
 import net.normalv.lifesimulation.math.Vec2d;
 import net.normalv.lifesimulation.world.entities.Entity;
 import net.normalv.lifesimulation.world.food.FoodItem;
+import net.normalv.lifesimulation.world.food.FoodSource;
 import net.normalv.lifesimulation.world.food.watersources.WaterPond;
 
 import java.util.ArrayList;
@@ -40,28 +41,9 @@ public class Bobble extends Entity {
     public void wander() {
         if(!isAlive()) return;
 
-        if(getThirst() < 80 && getTargetWaterPond() == null) {
-            for(WaterPond waterPond : LifeSimApplication.resourceManager.getGlobalWaterPonds()) {
-                if(distanceTo(waterPond.getPos()) - waterPond.getWaterAmount() <= getSightDistance()) {
+        if(getThirst() < 80) findWaterPond();
 
-                    setTargetWaterPond(waterPond);
-                    if(setCurrentGoal(new Goal(waterPond.getPos(), 100-getThirst()))) break;
-                    else setTargetWaterPond(null);
-                }
-            }
-        }
-        if(getHunger() < 80 && getTargetFood() == null) {
-            for(FoodItem foodItem : LifeSimApplication.resourceManager.getGlobalFoodItems()) {
-                if(foodItem.getDespawnIn() < 10) continue;
-                if(distanceTo(foodItem.getPos()) - foodItem.getRadius() <= getSightDistance()) {
-                    if(checkForTakenFood(foodItem)) continue;
-
-                    setTargetFood(foodItem);
-                    if(setCurrentGoal(new Goal(foodItem.getPos(), 100-getHunger()))) break;
-                    else setTargetFood(null);
-                }
-            }
-        }
+        if(getHunger() < 80) findFoodSource();
 
         if(getCurrentGoal() != null) {
             moveToNextStep();
@@ -82,12 +64,34 @@ public class Bobble extends Entity {
         });
     }
 
-    private boolean checkForTakenFood(FoodItem foodItem) {
-        for(Bobble bobble : LifeSimApplication.getUpdateLoop().getBobbles()) {
-            if(bobble == this || bobble.getTargetFood() == null || !bobble.getTargetFood().getPos().isEqualTo(foodItem.getPos())) continue;
-            return true;
+    // Find a water pond we can drink from
+    private void findWaterPond() {
+        // If we remember a water pond try to go there first
+        if(getRememberedWaterPond() != null && getTargetWaterPond() != null && !getTargetWaterPond().getPos().isEqualTo(getRememberedWaterPond().getPos())) {
+            setTargetWaterPond(getRememberedWaterPond());
+            setCurrentGoal(new Goal(getRememberedWaterPond().getPos(), 100-getThirst()));
         }
-        return false;
+
+        // If we dont remember a water pond or there is one nearer then that is our goal
+        for(WaterPond waterPond : LifeSimApplication.resourceManager.getGlobalWaterPonds()) {
+            if(distanceTo(waterPond.getPos()) - waterPond.getWaterAmount() <= getSightDistance()) {
+                if(getRememberedWaterPond() != null && distanceTo(waterPond.getPos()) > distanceTo(getRememberedWaterPond().getPos())) continue;
+
+                setTargetWaterPond(waterPond);
+                if(setCurrentGoal(new Goal(waterPond.getPos(), 100-getThirst()))) break;
+                else setTargetWaterPond(null);
+            }
+        }
+    }
+
+    private void findFoodSource() {
+        for(FoodSource foodSource : LifeSimApplication.resourceManager.getGlobalFoodSources()) {
+            if(distanceTo(foodSource.getPos()) <= getSightDistance() && foodSource.getGrownFood().size() > getMinGrownFoodForTarget()) {
+                setTargetFoodSource(foodSource);
+                if(setCurrentGoal(new Goal(foodSource.getPos(), 100-getHunger()))) break;
+                else setTargetFoodSource(null);
+            }
+        }
     }
 
     public void updateMeet() {
@@ -108,7 +112,7 @@ public class Bobble extends Entity {
 
                 setCurrentGoal(new Goal(meetingPos, 200));
                 setTargetWaterPond(null);
-                setTargetFood(null);
+                setTargetFoodSource(null);
 
                 bobbleToMeet = bobble;
                 this.meetingPos = meetingPos;
@@ -120,7 +124,7 @@ public class Bobble extends Entity {
     public boolean meetBobble(Vec2d meetingPos, Bobble bobble) {
         if(getHunger() < 50 || getThirst() < 50 || bobbleToMeet != null) return false;
 
-        setTargetFood(null);
+        setTargetFoodSource(null);
         setTargetWaterPond(null);
         setCurrentGoal(new Goal(meetingPos, 200));
         bobbleToMeet = bobble;
