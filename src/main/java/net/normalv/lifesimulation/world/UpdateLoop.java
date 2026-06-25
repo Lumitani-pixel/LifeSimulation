@@ -4,7 +4,8 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.layout.AnchorPane;
 import net.normalv.lifesimulation.LifeSimApplication;
-import net.normalv.lifesimulation.bobble.Bobble;
+import net.normalv.lifesimulation.world.bobble.Bobble;
+import net.normalv.lifesimulation.world.entities.Entity;
 import net.normalv.lifesimulation.world.food.FoodSource;
 import net.normalv.lifesimulation.world.food.FoodItem;
 import net.normalv.lifesimulation.world.food.foodsources.AppleTree;
@@ -27,6 +28,8 @@ public class UpdateLoop{
 
     private int rainChance = 500; // Will change each time rain is triggered
     private int rainDuration = 10; // How many ticks the rain lasts
+
+    private List<Entity> entities = new ArrayList<>();
 
     private List<Bobble> bobbles;
     private List<Bobble> bobblesToAdd = new ArrayList<>();
@@ -84,7 +87,7 @@ public class UpdateLoop{
 
                             // Remove Bobble from internal and visual list
                             iterator.remove();
-                            simGroup.getChildren().remove(bobble.getCircle());
+                            simGroup.getChildren().remove(bobble.getShape());
                             Logger.info("Population: "+population);
                             Logger.info("Dead bobble: "+bobble);
                             continue;
@@ -153,14 +156,18 @@ public class UpdateLoop{
 
     public void addBobble(Bobble bobble) {
         bobblesToAdd.add(bobble);
-        simGroup.getChildren().add(bobble.getCircle());
+        simGroup.getChildren().add(bobble.getShape());
         population++;
         Logger.info("Population: "+population);
     }
 
+    public void addEntity(Entity entity) {
+        entities.add(entity);
+    }
+
     private void addBobblesToRender() {
         for(Bobble bobble : bobbles) {
-            simGroup.getChildren().add(bobble.getCircle());
+            simGroup.getChildren().add(bobble.getShape());
         }
     }
 
@@ -184,6 +191,10 @@ public class UpdateLoop{
 
     public void setRainDuration(int duration) {
         rainDuration = duration;
+    }
+
+    public List<Entity> getEntityMap() {
+        return entities;
     }
 
     public List<Bobble> getBobbles() {

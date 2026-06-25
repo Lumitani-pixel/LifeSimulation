@@ -1,7 +1,7 @@
 package net.normalv.lifesimulation.world.entities;
 
+import javafx.scene.shape.Shape;
 import net.normalv.lifesimulation.LifeSimApplication;
-import net.normalv.lifesimulation.bobble.Bobble;
 import net.normalv.lifesimulation.math.Goal;
 import net.normalv.lifesimulation.math.Vec2d;
 import net.normalv.lifesimulation.world.food.FoodItem;
@@ -11,13 +11,15 @@ import net.normalv.lifesimulation.world.food.watersources.WaterPond;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public abstract class Entity extends Features{
-    private final Random random = new Random();
+    private final UUID uuid;
     private int health;
     private boolean alive;
     private int hunger = 100;
     private int thirst = 100;
+    private int interactionRadius;
     private int minGrownFoodForTarget = 1; // If there is less food on a food source than this we dont set it as a target
     private int minWaterAmountForTarget = 1; // If there is less water then this we dont set the water source as a target
 
@@ -26,15 +28,19 @@ public abstract class Entity extends Features{
     private List<Vec2d> stepsToGoal = new ArrayList<>();
     private WaterPond targetWaterPond;
     private FoodSource targetFoodSource;
+    private Shape shape;
 
     private WaterPond rememberedWaterPond;
     private FoodSource rememberedFoodSource;
 
-    public Entity(int runSpeed, int health, int sightDistance, Vec2d spawnPos) {
+    public Entity(int runSpeed, int health, int sightDistance, Vec2d spawnPos, Shape shape, int interactionRadius) {
         super(runSpeed, sightDistance);
         this.health = health;
         this.alive = true;
+        this.interactionRadius = interactionRadius;
         this.pos = spawnPos;
+        this.uuid = UUID.randomUUID();
+        this.shape = shape;
     }
 
     // Health update functions
@@ -148,7 +154,7 @@ public abstract class Entity extends Features{
         if (targetWaterPond != null) {
             this.currentGoal = new Goal(getEdgePoint(currentGoal.getGoalPosition(), targetWaterPond.getWaterAmount()), currentGoal.getPriority());
         } else if (targetFoodSource != null) {
-            this.currentGoal = new Goal(getEdgePoint(currentGoal.getGoalPosition(), 10.0), currentGoal.getPriority());
+            this.currentGoal = new Goal(getEdgePoint(currentGoal.getGoalPosition(), interactionRadius), currentGoal.getPriority());
         } else {
             this.currentGoal = currentGoal;
         }
@@ -186,6 +192,10 @@ public abstract class Entity extends Features{
         double goalY = center.y() - ny * radius;
 
         return new Vec2d(goalX, goalY);
+    }
+
+    public void setInteractionRadius(int interactionRadius) {
+        this.interactionRadius = interactionRadius;
     }
 
     public WaterPond getTargetWaterPond() {
@@ -237,7 +247,19 @@ public abstract class Entity extends Features{
         return thirst;
     }
 
+    public int getInteractionRadius() {
+        return interactionRadius;
+    }
+
     public Vec2d getPos() {
         return pos;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public Shape getShape() {
+        return shape;
     }
 }

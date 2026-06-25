@@ -1,13 +1,13 @@
-package net.normalv.lifesimulation.bobble;
+package net.normalv.lifesimulation.world.bobble;
 
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 import net.normalv.lifesimulation.LifeSimApplication;
 import net.normalv.lifesimulation.math.Goal;
 import net.normalv.lifesimulation.math.Vec2d;
 import net.normalv.lifesimulation.world.entities.Entity;
-import net.normalv.lifesimulation.world.food.FoodItem;
 import net.normalv.lifesimulation.world.food.FoodSource;
 import net.normalv.lifesimulation.world.food.watersources.WaterPond;
 
@@ -17,8 +17,6 @@ import java.util.Random;
 import static net.normalv.lifesimulation.LifeSimApplication.mainMenuController;
 
 public class Bobble extends Entity {
-    private Circle circle;
-
     private int meetingCooldown = 2000;
     private Bobble bobbleToMeet;
     private Vec2d meetingPos;
@@ -26,8 +24,7 @@ public class Bobble extends Entity {
     private Random random = new Random();
 
     public Bobble(int runSpeed, int sightDistance, Vec2d spawnPos) {
-        super(runSpeed, 100, sightDistance, spawnPos);
-        this.circle = new Circle(spawnPos.x(), spawnPos.y(), 10, Color.GREEN);
+        super(runSpeed, 100, sightDistance, spawnPos, new Circle(spawnPos.x(), spawnPos.y(), 10, Color.GREEN), 10);
     }
 
     public void updateAll() {
@@ -59,8 +56,8 @@ public class Bobble extends Entity {
 
         meetingCooldown--;
         Platform.runLater(() -> {
-            circle.setCenterX(getPos().x());
-            circle.setCenterY(getPos().y());
+            ((Circle) getShape()).setCenterX(getPos().x());
+            ((Circle) getShape()).setCenterY(getPos().y());
         });
     }
 
@@ -167,8 +164,12 @@ public class Bobble extends Entity {
         return randomBobbles;
     }
 
-    public Circle getCircle() {
-        return this.circle;
+    public Bobble getBobbleToMeet() {
+        return bobbleToMeet;
+    }
+
+    public Vec2d getMeetingPos() {
+        return meetingPos;
     }
 
     @Override

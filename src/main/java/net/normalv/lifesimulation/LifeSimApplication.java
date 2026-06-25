@@ -77,6 +77,10 @@ public class LifeSimApplication extends Application {
         bobbleSimulationController = bobbleSimulationControllerSetter;
     }
 
+    public static void setUpdateLoop(UpdateLoop loop) {
+        updateLoop = loop;
+    }
+
     public static UpdateLoop getUpdateLoop() {
         return updateLoop;
     }
