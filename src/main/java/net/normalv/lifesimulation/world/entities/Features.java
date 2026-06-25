@@ -1,8 +1,10 @@
 package net.normalv.lifesimulation.world.entities;
 
+import net.normalv.lifesimulation.util.Util;
+
 import java.util.Random;
 
-public abstract class Features {
+public abstract class Features implements Util {
     private int sightDistance; // How far away they can detect objects
     private int runSpeed; // How far they can run each tick
 

@@ -27,7 +27,8 @@ public class Bobble extends Entity {
         super(runSpeed, 100, sightDistance, spawnPos, new Circle(spawnPos.x(), spawnPos.y(), 10, Color.GREEN), 10);
     }
 
-    public void updateAll() {
+    @Override
+    public void update() {
         updateHealth();
         updateHunger();
         updateThirst();
@@ -100,8 +101,8 @@ public class Bobble extends Entity {
     public void findBobbleToMeet() {
         if(bobbleToMeet != null || meetingPos != null) return;
 
-        for(Bobble bobble : LifeSimApplication.getUpdateLoop().getBobbles()) {
-            if(bobble.getHunger() < 60 || bobble.getThirst() < 60) continue;
+        for(Entity entity : LifeSimApplication.getUpdateLoop().getEntities()) {
+            if(!(entity instanceof Bobble bobble) || bobble.getHunger() < 60 || bobble.getThirst() < 60) continue;
 
             // Creates a meeting pos thats in the middle of both bobbles
             Vec2d meetingPos = new Vec2d((bobble.getPos().x() + getPos().x()) / 2, (bobble.getPos().y() + getPos().y()) / 2);
@@ -132,7 +133,7 @@ public class Bobble extends Entity {
     public void mate() {
         // Makes sure only one bobble makes a newborn
         if(this.hashCode() > bobbleToMeet.hashCode()) {
-            LifeSimApplication.getUpdateLoop().addBobble(
+            LifeSimApplication.getUpdateLoop().addEntity(
                     new Bobble(getNewBornAttribute(bobbleToMeet.getRunSpeed(), getRunSpeed()),
                             getNewBornAttribute(bobbleToMeet.getSightDistance(), getSightDistance()),
                             getPos()

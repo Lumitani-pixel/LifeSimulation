@@ -43,6 +43,8 @@ public abstract class Entity extends Features{
         this.shape = shape;
     }
 
+    public abstract void update();
+
     // Health update functions
     public void damage(int damage) {
         health-=damage;
@@ -94,7 +96,6 @@ public abstract class Entity extends Features{
                 drinkWater();
             }
             else if(hunger < 80 && targetFoodSource != null) {
-                System.out.println("Food grown: "+targetFoodSource.getGrownFood().size());
                 if(targetFoodSource.getGrownFood().size() > minGrownFoodForTarget) rememberedFoodSource = targetFoodSource;
                 targetFoodSource.getGrownFood().forEach(this::eatFood);
             }

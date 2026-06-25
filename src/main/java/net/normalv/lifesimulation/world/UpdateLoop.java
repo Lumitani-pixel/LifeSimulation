@@ -30,9 +30,7 @@ public class UpdateLoop{
     private int rainDuration = 10; // How many ticks the rain lasts
 
     private List<Entity> entities = new ArrayList<>();
-
-    private List<Bobble> bobbles;
-    private List<Bobble> bobblesToAdd = new ArrayList<>();
+    private List<Entity> entitiesToAdd = new ArrayList<>();
 
     private AnimationTimer animationTimer;
 
@@ -50,7 +48,7 @@ public class UpdateLoop{
         simPane = LifeSimApplication.bobbleSimulationController.getSimPane();
 
         // World settings
-        this.bobbles = Bobble.makeRandomBobbles(sizex, sizey, this.population);
+        entities.addAll(Bobble.makeRandomBobbles(sizex, sizey, this.population));
         LifeSimApplication.resourceManager.assignGlobalFoodSources(AppleTree.createRandomAppleTrees(sizex, sizey, this.foodUnits));
         LifeSimApplication.resourceManager.assignGlobalWaterPonds(WaterPond.createWaterPonds(sizex, sizey, this.waterPondAmount));
 
@@ -58,7 +56,7 @@ public class UpdateLoop{
         addFoodSourcesToRender();
         addFoodItemsToRender();
         addWaterPondsToRender();
-        addBobblesToRender();
+        addEntitiesToRender();
         simPane.getChildren().add(simGroup);
 
         Logger.debug("==========Starting simulation loop==========");
@@ -77,27 +75,27 @@ public class UpdateLoop{
                     tickCounter++;
                     LifeSimApplication.resourceManager.update();
 
-                    Iterator<Bobble> iterator = bobbles.iterator();
+                    Iterator<Entity> iterator = entities.iterator();
 
                     while (iterator.hasNext()) {
-                        Bobble bobble = iterator.next();
+                        Entity entity = iterator.next();
 
-                        if (!bobble.isAlive()) {
+                        if (!entity.isAlive()) {
                             population--;
 
                             // Remove Bobble from internal and visual list
                             iterator.remove();
-                            simGroup.getChildren().remove(bobble.getShape());
+                            simGroup.getChildren().remove(entity.getShape());
                             Logger.info("Population: "+population);
-                            Logger.info("Dead bobble: "+bobble);
+                            Logger.info("Dead bobble: "+entity);
                             continue;
                         }
 
-                        bobble.updateAll();
+                        entity.update();
                     }
 
-                    bobbles.addAll(bobblesToAdd);
-                    bobblesToAdd.clear();
+                    entities.addAll(entitiesToAdd);
+                    entitiesToAdd.clear();
 
                     if(rainDuration<=0 && tickCounter%rainChance==0) {
                         rainDuration = random.nextInt(5, 11);
@@ -154,21 +152,11 @@ public class UpdateLoop{
         waterPondAmount++;
     }
 
-    public void addBobble(Bobble bobble) {
-        bobblesToAdd.add(bobble);
-        simGroup.getChildren().add(bobble.getShape());
+    public void addEntity(Entity entity) {
+        entitiesToAdd.add(entity);
+        simGroup.getChildren().add(entity.getShape());
         population++;
         Logger.info("Population: "+population);
-    }
-
-    public void addEntity(Entity entity) {
-        entities.add(entity);
-    }
-
-    private void addBobblesToRender() {
-        for(Bobble bobble : bobbles) {
-            simGroup.getChildren().add(bobble.getShape());
-        }
     }
 
     private void addWaterPondsToRender() {
@@ -189,16 +177,18 @@ public class UpdateLoop{
         }
     }
 
+    private void addEntitiesToRender() {
+        for(Entity entity : entities) {
+            simGroup.getChildren().add(entity.getShape());
+        }
+    }
+
     public void setRainDuration(int duration) {
         rainDuration = duration;
     }
 
-    public List<Entity> getEntityMap() {
+    public List<Entity> getEntities() {
         return entities;
-    }
-
-    public List<Bobble> getBobbles() {
-        return bobbles;
     }
 
     public Group getSimGroup() {
