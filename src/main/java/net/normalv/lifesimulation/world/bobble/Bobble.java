@@ -56,10 +56,8 @@ public class Bobble extends Entity {
         }
 
         meetingCooldown--;
-        Platform.runLater(() -> {
-            ((Circle) getShape()).setCenterX(getPos().x());
-            ((Circle) getShape()).setCenterY(getPos().y());
-        });
+        ((Circle) getShape()).setCenterX(getPos().x());
+        ((Circle) getShape()).setCenterY(getPos().y());
     }
 
     // Find a water pond we can drink from
