@@ -1,0 +1,23 @@
+[Bobby Log]:[2026-07-18 20:49:27]:[DEBUG] Starting new sim with. Population: 10, WaterPonds: 8, Starting FoodUnits: 15 mating is: enabled
+[Bobby Log]:[2026-07-18 20:49:27]:[DEBUG] ==========Starting simulation loop==========
+[Bobby Log]:[2026-07-18 20:49:27]:[INFO] Population: 9
+[Bobby Log]:[2026-07-18 20:49:27]:[INFO] Dead bobble: Health: 0, Hunger: 0, Thirst: 90, running speed: 20, sight distance: 119
+[Bobby Log]:[2026-07-18 20:49:27]:[INFO] Population: 8
+[Bobby Log]:[2026-07-18 20:49:27]:[INFO] Dead bobble: Health: 0, Hunger: 0, Thirst: 100, running speed: 15, sight distance: 115
+[Bobby Log]:[2026-07-18 20:49:28]:[INFO] Population: 7
+[Bobby Log]:[2026-07-18 20:49:28]:[INFO] Dead bobble: Health: 0, Hunger: 140, Thirst: 0, running speed: 15, sight distance: 119
+[Bobby Log]:[2026-07-18 20:49:28]:[INFO] Population: 6
+[Bobby Log]:[2026-07-18 20:49:28]:[INFO] Dead bobble: Health: 0, Hunger: 170, Thirst: 0, running speed: 15, sight distance: 111
+[Bobby Log]:[2026-07-18 20:49:28]:[INFO] Population: 5
+[Bobby Log]:[2026-07-18 20:49:28]:[INFO] Dead bobble: Health: 0, Hunger: 115, Thirst: 0, running speed: 18, sight distance: 81
+[Bobby Log]:[2026-07-18 20:49:29]:[INFO] Population: 4
+[Bobby Log]:[2026-07-18 20:49:29]:[INFO] Dead bobble: Health: 0, Hunger: 90, Thirst: 0, running speed: 19, sight distance: 117
+[Bobby Log]:[2026-07-18 20:49:29]:[INFO] Population: 3
+[Bobby Log]:[2026-07-18 20:49:29]:[INFO] Dead bobble: Health: 0, Hunger: 85, Thirst: 0, running speed: 21, sight distance: 90
+[Bobby Log]:[2026-07-18 20:49:29]:[INFO] Population: 2
+[Bobby Log]:[2026-07-18 20:49:29]:[INFO] Dead bobble: Health: 0, Hunger: 140, Thirst: 0, running speed: 23, sight distance: 116
+[Bobby Log]:[2026-07-18 20:49:30]:[INFO] Population: 1
+[Bobby Log]:[2026-07-18 20:49:30]:[INFO] Dead bobble: Health: 0, Hunger: 165, Thirst: 0, running speed: 22, sight distance: 88
+[Bobby Log]:[2026-07-18 20:49:30]:[INFO] Population: 0
+[Bobby Log]:[2026-07-18 20:49:30]:[INFO] Dead bobble: Health: 0, Hunger: 130, Thirst: 0, running speed: 18, sight distance: 109
+[Bobby Log]:[2026-07-18 20:49:32]:[DEBUG] ==========Closing Logger==========
