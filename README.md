@@ -43,32 +43,9 @@ The simulation runs automatically. Bobbles will:
 - Seek water when thirsty
 - Mate when both needs are met (if enabled)
 
-## Project Structure
-
-```
-src/main/java/net/normalv/lifesimulation/
-├── LifeSimApplication.java     # Main entry point
-├── bobble/
-│   └── Bobble.java          # Main entity
-├── controller/
-│   ├── BobbleSimulationController.java
-│   └── MainMenuController.java
-├── world/
-│   ├── UpdateLoop.java      # Main simulation loop
-│   └── entities/
-│       └── Entity.java     # Base entity class
-├── world/food/
-│   ├── FoodSource.java     # Food source (apple trees)
-│   ├── FoodItem.java     # Food items
-│   └── watersources/
-│       └── WaterPond.java # Water sources
-└── util/managers/
-    └── ResourceManager.java # Resource management
-```
 
 ## Problems / TODOs
 
 - Application doesn't fully close/stop when told to
-- Hunger/Thirst compared to food and water seem somewhat imbalanced
 - World is very simple and doesn't leave a lot of options for the bobbles
 - Pathing of bobbles is very simple and can easily misbehave
